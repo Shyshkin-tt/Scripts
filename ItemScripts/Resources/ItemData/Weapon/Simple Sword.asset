@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
+  m_Name: Simple Sword
+  m_EditorClassIdentifier: 
+  ID: 7
+  Tier: 1
+  DisplayName: Simple Sword
+  ItemType: 1H_Weapon
+  SlotType: EquipSlot
+  EquipSlotype: RHand
+  Description: 
+  Icon: {fileID: 21300000, guid: 9062620e1b61a924580836704599e80f, type: 3}
+  MaxStackSize: 1
+  GoldValue: 110
+  Chance: 60
+  ItemPrefab: {fileID: 6989142407910210305, guid: 3dee99c0d79e0c24e9f1826fa0f5e8f7, type: 3}
+  ItemPower: 5
+  Health: 10
+  Mana: 2
+  PhysicDamage: 25
+  MagicDamage: 0
+  AttackSpeed: 2
+  PhysicDefence: 0
+  MagicDefence: 0
+  HealthRecovery: 0
+  ManaRecovery: 0

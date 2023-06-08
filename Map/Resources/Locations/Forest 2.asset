@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 902dbd6bbb1e43c4183e65c74c8b091b, type: 3}
+  m_Name: Forest 2
+  m_EditorClassIdentifier: 
+  locationName: Forest 2
+  spawnPoints:
+  - nameSpawn: SW
+    spawnPoint: {x: 36.9, y: 52.95, z: -87.37}
+  - nameSpawn: SE
+    spawnPoint: {x: 79.46, y: 52.95, z: -25.85}
+  - nameSpawn: 'NE '
+    spawnPoint: {x: 12.24, y: 57.45587, z: 0.96}
+  - nameSpawn: NW
+    spawnPoint: {x: -4.18, y: 57.45, z: -28.69}

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
+  m_Name: Simple Shield
+  m_EditorClassIdentifier: 
+  ID: 11
+  Tier: 1
+  DisplayName: Simple Shield
+  ItemType: OffHeand
+  SlotType: EquipSlot
+  EquipSlotype: LHand
+  Description: 
+  Icon: {fileID: 21300000, guid: 843d400cba1108a4b959a0d3a6d502a9, type: 3}
+  MaxStackSize: 1
+  GoldValue: 75
+  Chance: 60
+  ItemPrefab: {fileID: 6909298429430985229, guid: 4edad73fc0bc86c4a88870f3cbedcfdb, type: 3}
+  ItemPower: 5
+  Health: 50
+  Mana: 20
+  PhysicDamage: 0
+  MagicDamage: 0
+  AttackSpeed: 0
+  PhysicDefence: 25
+  MagicDefence: 10
+  HealthRecovery: 5
+  ManaRecovery: 5

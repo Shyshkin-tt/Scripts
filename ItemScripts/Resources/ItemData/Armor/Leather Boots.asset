@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
+  m_Name: Leather Boots
+  m_EditorClassIdentifier: 
+  ID: 5
+  Tier: 1
+  DisplayName: Leather Boots
+  ItemType: Shoes
+  SlotType: EquipSlot
+  EquipSlotype: Shoes
+  Description: 
+  Icon: {fileID: 21300000, guid: 2a145b2ab5b5ab444b9951411443c56a, type: 3}
+  MaxStackSize: 1
+  GoldValue: 155
+  Chance: 60
+  ItemPrefab: {fileID: 2746944917617099068, guid: f67ba0d88a66d824db66b754eb8f516b, type: 3}
+  ItemPower: 10
+  Health: 15
+  Mana: 5
+  PhysicDamage: 8
+  MagicDamage: 3
+  AttackSpeed: 0
+  PhysicDefence: 9
+  MagicDefence: 4
+  HealthRecovery: 5
+  ManaRecovery: 3

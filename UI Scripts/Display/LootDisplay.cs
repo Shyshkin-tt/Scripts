@@ -1,0 +1,58 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using System.Linq;
+
+
+public class LootDisplay : InventoryController
+{
+    [SerializeField] protected InventorySlot_UI _slotPrefab;
+    [SerializeField] private GameObject _itemList;
+
+    protected override void Start()
+    {
+        base.Start();     // вызов метода Start из родительского класса
+    }
+
+    public void RefreshLootBag(InventorySystem invToDisplay)
+    {
+        ClearSlots(); // Очистка слотов перед обновлением инвентаря
+        inventorySystem = invToDisplay;    // устанавливает систему инвентаря для отображения   
+        // подписывается на событие изменения слота инвентаря
+        if (inventorySystem != null) inventorySystem.OnInventorySlotChanged += UpdateSlot;
+        AssignSlot(invToDisplay); // вызывает метод назначения слота
+    }
+
+    public override void AssignSlot(InventorySystem invToDisplay) // Назначает слоты для отображения в UI
+    {
+        ClearSlots();
+
+        slotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
+
+        if (invToDisplay == null) return;
+
+        for (int i = 0; i < invToDisplay.InventorySize; i++)
+        {
+            var uiSlot = Instantiate(_slotPrefab, _itemList.transform);// Создает экземпляр слота
+            slotDictionary.Add(uiSlot, invToDisplay.InventorySlots[i]); // Добавляет слот в словарь
+            uiSlot.Init(invToDisplay.InventorySlots[i]); // Инициализирует слот
+            uiSlot.UpdateUISlot(); // Обновляет UI слот
+        }
+    }
+    private void ClearSlots()
+    {
+        foreach (var item in _itemList.transform.Cast<Transform>())
+        {
+            Destroy(item.gameObject);
+        }
+
+        if (slotDictionary != null) slotDictionary.Clear();
+
+
+    }
+    private void OnDisable() // Отписка от события изменения слота инвентаря при выключении объекта
+    {
+        if (inventorySystem != null) inventorySystem.OnInventorySlotChanged -= UpdateSlot;
+    }
+}
