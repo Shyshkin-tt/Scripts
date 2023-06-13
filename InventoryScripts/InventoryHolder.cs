@@ -30,7 +30,7 @@ public class InventoryHolder : MonoBehaviour
     private int _mpValue = 0;
     private int _hpRec = 5;
     private int _mpRec = 2;
-    [SerializeField] Vector3 _lastCoordinats;
+    [SerializeField] private Vector3 _spawnCoords;
     [SerializeField] private Vector3 _curentCoordinats;
 
     public int _inventorySize;
@@ -53,7 +53,7 @@ public class InventoryHolder : MonoBehaviour
         playerSkin = GetComponentInChildren<SkinnedMeshRenderer>();
 
         _inventory = new InventorySystem(_inventorySize, _equipSlots, _bagSlots, _acc, _name, _location, _coins, _ip, _hp, _mp, _pd, _md, _as, _ms,
-        _pdef, _mdef, _hpValue, _mpValue, _hpRec, _mpRec, _lastCoordinats, _curentCoordinats, playerSkin, _holder);
+        _pdef, _mdef, _hpValue, _mpValue, _hpRec, _mpRec, _spawnCoords, _curentCoordinats, playerSkin, _holder);
 
         _inventory.SetValue();
 
@@ -120,9 +120,12 @@ public class InventoryHolder : MonoBehaviour
     public void RemoveFromPlayer(InventorySlot itemData)
     {      
         Destroy(itemData.OnEquip.transform.GetChild(0).gameObject);
-    }  
+    }
 
-
+    public void SetCoordInHolder(Vector3 coords)
+    {
+        _spawnCoords = coords;
+    }
 }
 
 [System.Serializable]

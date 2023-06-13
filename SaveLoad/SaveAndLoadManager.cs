@@ -16,8 +16,6 @@ public class SaveAndLoadManager : MonoBehaviour
     public static void LoadData(SaveData saveData)
     {        
         _saveData = saveData;
-
-        Debug.Log("Load data");
     }
     public static void SaveCharList()
     {

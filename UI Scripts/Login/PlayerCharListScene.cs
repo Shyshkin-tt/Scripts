@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine.SceneManagement;
+using System;
+using static UnityEditor.FilePathAttribute;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class CharacterPreviewList : MonoBehaviour
@@ -17,8 +20,8 @@ public class PlayerCharListScene : MonoBehaviour
 {
     EventSystem _system;
     PlayerController _input;
-
-    public string _activCharacterPreview;
+    public Locations _loc;
+    public static string _activCharacterPreview;
     public TextMeshProUGUI _activCharNick;
 
     [Header("Top buttons")]
@@ -131,12 +134,32 @@ public class PlayerCharListScene : MonoBehaviour
         var charSets = charPreview.GetComponent<InventoryHolder>();
         charSets.Inventory.SetName(name);
         charSets.Inventory.SetLocation(loc);
+
+        Vector3 coords = FindLocationCoordinates(loc);
+
+        charSets.Inventory.SetCoord(coords);
+        charSets.SetCoordInHolder(coords);
         charSets.SetNameAndLoc(name, loc);
         charSets._uiPlayer.SetActive(false);
         var fade = charPreview.GetComponent<FadeToMe>();
         fade.enabled = false;
         SaveAndLoadManager.SaveCharList();
+       
     }
+
+    private Vector3 FindLocationCoordinates(string loc)
+    {
+        foreach (var location in _loc.locations)
+        {
+            if (location.locationName == loc)
+            {
+                Debug.Log(loc);
+                return location.spawnPoints[0].spawnPoint; // Предполагаем, что стартовая локация имеет только одну точку спавна
+            }
+        }
+        return Vector3.zero;
+    }
+
     public void DeleteChar()
     {
         Transform child = _previewCharacter.transform.GetChild(0);
@@ -153,6 +176,15 @@ public class PlayerCharListScene : MonoBehaviour
         
         SceneManager.LoadScene("Login");
         
+    }
+
+    public void EntryInGame()
+    {
+        var character = _previewCharacter.transform.GetComponentInChildren<InventoryHolder>();
+
+        var locationlist = GetComponent<LocationManager>();
+
+        locationlist.MovePlayer(character.Inventory.Location, "StartPoint");
     }
 }
 

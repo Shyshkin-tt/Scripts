@@ -25,7 +25,7 @@ public class InventorySystem
     [SerializeField] protected int _hpRec;
     [SerializeField] protected int _mpRec;
 
-    [SerializeField] protected Vector3 _lastCoordinats;
+    [SerializeField] protected Vector3 _spawnCoords;
     [SerializeField] protected Vector3 _curentCoordinats;
 
     [SerializeField] protected SkinnedMeshRenderer _playerSkin;
@@ -50,7 +50,7 @@ public class InventorySystem
     public int MPValue => _mpValue;
     public int HPRec => _hpRec;
     public int MPRec => _mpRec;
-    public Vector3 LastCoordinats => _lastCoordinats;
+    public Vector3 SpawnCoord => _spawnCoords;
     public Vector3 CurrentCoordinats => _curentCoordinats;
     
     public InventoryHolder Holder => _holder;
@@ -86,7 +86,7 @@ public class InventorySystem
         _mpValue = mpValue;
         _hpRec = hpRec;
         _mpRec = mpRec;
-        _lastCoordinats = lastCoordinats;
+        _spawnCoords = lastCoordinats;
         _curentCoordinats = curentCoordinats;
         _playerSkin = playerSkin;
         _holder = holder;
@@ -326,5 +326,10 @@ public class InventorySystem
     public void SetLocation(string location)
     {
         _location = location;
+    }
+
+    public void SetCoord(Vector3 coords)
+    {
+        _spawnCoords = coords;
     }
 }

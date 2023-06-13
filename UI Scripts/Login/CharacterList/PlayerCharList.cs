@@ -41,7 +41,7 @@ public class PlayerCharList : MonoBehaviour
     private void LoadCharList(SaveData data)
     {
         _charCreator = data.playerListData.ChararacterCreator;
-        Debug.Log("LoadCharList");
+       
         foreach (var chars in CharCreator.CharLists)
         {
             if(chars.Name != null)

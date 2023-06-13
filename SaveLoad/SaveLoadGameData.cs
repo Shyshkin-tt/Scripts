@@ -30,7 +30,7 @@ public static class SaveLoadGameData
     }
     private static void OnSaveCharacterListSuccess(UpdateUserDataResult result)
     {
-        Debug.Log("Character list saved");
+        //Debug.Log("Character list saved");
     }
     private static void OnSaveCharacterListFailure(PlayFabError error)
     {
@@ -59,15 +59,13 @@ public static class SaveLoadGameData
     }
     public static void SaveCharacterInventory(SaveData data)
     {
-        OnSaveData?.Invoke();
-
-        string json = JsonUtility.ToJson(data.playerInventory, true);
+        OnSaveData?.Invoke();        
 
         var request = new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string>
             {
-                { data.playerInventory.InvSys.Name, json }
+                {data.playerInventory.InvSys.Name, JsonUtility.ToJson(data.playerInventory) }
             }
         };
         PlayFabClientAPI.UpdateUserData(request, OnSaveCharacterInventorySuccess, OnSaveCharacterInventoryFailure);
@@ -77,24 +75,23 @@ public static class SaveLoadGameData
         var request = new GetUserDataRequest();
         PlayFabClientAPI.GetUserData(request, OnLoadCharacterInventorySuccess, OnLoadCharacterInventoryFailure);
     }
+    private static void OnLoadCharacterInventorySuccess(GetUserDataResult result)
+    {
+        SaveData data = new SaveData();
+
+        if (result.Data != null && result.Data.ContainsKey(PlayerCharListScene._activCharacterPreview))
+        {
+            string json = result.Data[PlayerCharListScene._activCharacterPreview].Value;
+            data.playerInventory = JsonUtility.FromJson<InventorySaveData>(json);
+            OnLoadData?.Invoke(data);
+            Debug.Log(data.playerInventory.InvSys.Name);
+        }
+    }
 
     private static void OnLoadCharacterInventoryFailure(PlayFabError error)
     {
         Debug.Log(error.ErrorDetails);
     }
-
-    private static void OnLoadCharacterInventorySuccess(GetUserDataResult result)
-    {
-        SaveData data = new SaveData();
-
-        if (result.Data != null && result.Data.ContainsKey("Player Characters"))
-        {
-            string json = result.Data["Player Characters"].Value;
-            data.playerListData = JsonUtility.FromJson<PlayerListData>(json);
-            OnLoadData?.Invoke(data);
-        }
-    }
-
     
     private static void OnSaveCharacterInventorySuccess(UpdateUserDataResult result)
     {
