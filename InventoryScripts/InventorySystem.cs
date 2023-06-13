@@ -36,7 +36,7 @@ public class InventorySystem
     private float _lastRecMP = 0f;
     public string Name => _name;
     public string Location => _location;
-    public int Coines => _coins;// свойство для получения золота
+    public int Coines => _coins;
     public int ItemPower => _ip;
     public int Health => _hp;
     public int Mana => _mp;
@@ -55,9 +55,9 @@ public class InventorySystem
     
     public InventoryHolder Holder => _holder;
 
-    [SerializeField] private List<InventorySlot> _inventorySlots;
-    [SerializeField] private List<InventorySlot> _equipSlots;
-    [SerializeField] private List<InventorySlot> _beltSlots;
+    [SerializeField] protected List<InventorySlot> _inventorySlots;
+    [SerializeField] protected List<InventorySlot> _equipSlots;
+    [SerializeField] protected List<InventorySlot> _beltSlots;
     public List<InventorySlot> InventorySlots => _inventorySlots;
     public List<InventorySlot> EquipSlots => _equipSlots;
     public List<InventorySlot> BeltSlots => _beltSlots;
@@ -318,6 +318,13 @@ public class InventorySystem
         _hpValue -= stats.Health;
         _mpValue -= stats.Mana;
     }
-   
-   
+
+    public void SetName(string name)
+    {
+        _name = name;
+    }
+    public void SetLocation(string location)
+    {
+        _location = location;
+    }
 }

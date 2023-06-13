@@ -1,9 +1,9 @@
 using Gentleland.StemapunkUI.DemoAndExample;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using PlayFab;
-using PlayFab.ClientModels;
+
 
 [System.Serializable]
 public class InventoryHolder : MonoBehaviour
@@ -46,8 +46,8 @@ public class InventoryHolder : MonoBehaviour
     public static UnityAction OnInventorySlotChanged;
 
     protected virtual void Awake()
-    {        
-        SaveLoad.OnLoadGame += LoadInventory;
+    {
+        SaveLoadGameData.OnLoadData += LoadInventory;
 
         _holder = GetComponent<InventoryHolder>();
         playerSkin = GetComponentInChildren<SkinnedMeshRenderer>();
@@ -58,33 +58,37 @@ public class InventoryHolder : MonoBehaviour
         _inventory.SetValue();
 
         SetSlot();
-    }  
+        
+    }
+
+    public void SetNameAndLoc(string name, string loc)
+    {
+        _name = name;
+        _location = loc;
+    }
 
     private void Start()
-    {        
-        SaveGameManager.data.playerInventory = new InventorySaveData(_inventory);
+    {
+        SaveAndLoadManager._saveData.playerInventory = new InventorySaveData(_inventory);
+        SaveAndLoadManager.LoadInventory();
     }
 
     private void Update()
     {
         _inventory.GetCurentCoords(_holder);
         _curentCoordinats = _inventory.CurrentCoordinats;
-        _location = SceneManager.GetActiveScene().name;
+        //_location = SceneManager.GetActiveScene().name;
     }
 
-    protected virtual void LoadInventory(SaveData saveData)
+    protected virtual void LoadInventory(SaveData data)
     {
-        if (saveData.playerInventory.InvSystem != null)
-        {
-            this._inventory = saveData.playerInventory.InvSystem;
+        _inventory = data.playerInventory.InvSys;
 
-            foreach(var slot in  Inventory.EquipSlots)
+        foreach (var slot in Inventory.EquipSlots)
+        {
+            if (slot.ItemData != null)
             {
-                if (slot.ItemData != null)
-                {                    
-                    EquipOnPlayer(slot);
-                    
-                }
+                EquipOnPlayer(slot);
             }
         }
     }
@@ -117,27 +121,17 @@ public class InventoryHolder : MonoBehaviour
     {      
         Destroy(itemData.OnEquip.transform.GetChild(0).gameObject);
     }  
-}
 
+
+}
 
 [System.Serializable]
 public struct InventorySaveData
 {
-    public InventorySystem InvSystem;
-    public Vector3 Position;
-    public Quaternion Rotation;
+    public InventorySystem InvSys;
 
-    public InventorySaveData(InventorySystem _invSystem, Vector3 _position, Quaternion _rotation)
+    public InventorySaveData(InventorySystem invSys)
     {
-        InvSystem = _invSystem;
-        Position = _position;
-        Rotation = _rotation;
-    }
-    public InventorySaveData(InventorySystem _invSystem)
-    {
-        InvSystem = _invSystem;
-        Position = Vector3.zero;
-        Rotation = Quaternion.identity;
-    }
+        InvSys = invSys;
+    }   
 }
-

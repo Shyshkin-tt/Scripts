@@ -11,13 +11,15 @@ public class Animation : MonoBehaviour
     private CharacterController _char;
     private ActionController _moving;
     private InventoryItemData _itemData;
+    private InventoryHolder _holder;
     public string _itemType;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _char = GetComponent<CharacterController>();
-        _moving = GetComponent<ActionController>();        
+        _moving = GetComponent<ActionController>();
+        _holder = GetComponent<InventoryHolder>();
     }
 
     private void Update()
@@ -26,13 +28,22 @@ public class Animation : MonoBehaviour
         _animator.SetFloat("Speed", speed);
         AnimationPlayer();
 
-        _itemType = GetComponent<InventoryHolder>().Inventory.EquipSlots[3].ItemData.ItemType;
+
+        if (_holder.Inventory.EquipSlots.Count > 3 && _holder.Inventory.EquipSlots[3].ItemData != null)
+        {
+            _itemType = _holder.Inventory.EquipSlots[3].ItemData.ItemType;
+        }
+        else
+        {
+            _itemType = null;
+        }
+
         AnimationType();
     }
 
     private void AnimationType()
     {
-        _animator.SetBool("No Weapon", string.IsNullOrWhiteSpace(_itemType));
+        _animator.SetBool("No Weapon", _itemType == null);
         _animator.SetBool("1H", _itemType == "1H_Weapon");
         _animator.SetBool("2H", _itemType == "2H_Weapon");
         _animator.SetBool("Polearm", _itemType == "Polearm");

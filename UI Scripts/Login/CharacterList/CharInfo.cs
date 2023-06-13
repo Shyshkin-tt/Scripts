@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+[System.Serializable]
 public abstract class CharInfo
 {
     [SerializeField] protected string _name;

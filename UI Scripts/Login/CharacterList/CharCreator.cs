@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.Events;
 
+
 [System.Serializable]
 public class CharCreator 
 {
@@ -21,8 +22,7 @@ public class CharCreator
     public List<Character> CharLists => _charList;
     
     public CharCreator(int countChars)
-    {           
-
+    {        
         CreatePlayerCharsList(countChars);
     }
 
@@ -34,6 +34,12 @@ public class CharCreator
         {
             _charList.Add(new Character(_name, _gender, _location));
         }
+    }
+    public void UpdateCharacterData(string name, string gender, string location)
+    {
+        _name = name;
+        _gender = gender;
+        _location = location;
     }
     public void SetGender(string gender)
     {
@@ -50,4 +56,5 @@ public class CharCreator
         _charList.RemoveAt(index);
         _countCharacters -= 1;
     }
+
 }

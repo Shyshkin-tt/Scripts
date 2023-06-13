@@ -15,28 +15,25 @@ public class ChestInventory : MonoBehaviour, IInteractable
 
     public static UnityAction<InventorySystem, int> InventoryChest;
 
-    protected virtual void Awake()
-    {        
-        SaveLoad.OnLoadGame += LoadInventory;
-    }
-
-    private void LoadInventory(SaveData data)
+    private void Awake()
     {
-        if (data.chestDictionary.TryGetValue(GetComponent<UniqueID>().ID, out ChestSaveData chestData))
+        SaveLoadGameData.OnLoadData += LoadChestLoot;
+    }
+    private void Start()
+    {
+        var chestSaveData = new ChestLootData(Inventory);
+        SaveAndLoadManager._saveData.chestLootData.Add(GetComponent<UniqueID>().ID, chestSaveData);
+
+        _inventory = new InventorySystem(_slotsCount);        
+    }   
+    private void LoadChestLoot(SaveData data)
+    {
+       if (data.chestLootData.TryGetValue(GetComponent<UniqueID>().ID, out ChestLootData chestData))
         {
-            this._inventory = chestData._invSystem;
-            this.transform.position = chestData._position;
-            this.transform.rotation = chestData._rotation;
+           _inventory = chestData.chestLoot;
         }
     }
 
-    private void Start()
-    {
-        _inventory = new InventorySystem(_slotsCount);
-        var chestSvaeData = new ChestSaveData(_inventory, transform.position, transform.rotation);
-
-        SaveGameManager.data.chestDictionary.Add(GetComponent<UniqueID>().ID, chestSvaeData);
-    }   
     public void Interact(ActionController interactor, out bool interactSuccessful)
     {        
         InventoryChest?.Invoke(_inventory, 0);       
@@ -48,18 +45,12 @@ public class ChestInventory : MonoBehaviour, IInteractable
 
     }
 }
-
-[System.Serializable]
-public struct ChestSaveData
+public struct ChestLootData
 {
-    public InventorySystem _invSystem;
-    public Vector3 _position;
-    public Quaternion _rotation;
+    public InventorySystem chestLoot;
 
-    public ChestSaveData(InventorySystem invSys, Vector3 position, Quaternion rotation)
+    public ChestLootData(InventorySystem loot)
     {
-        _invSystem = invSys;
-        _position = position;
-        _rotation = rotation;
+        chestLoot = loot;
     }
 }

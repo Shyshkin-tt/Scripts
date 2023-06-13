@@ -33,8 +33,8 @@ public class ShopKeeperDisplay : MonoBehaviour
     private int _basketTotal;// Общая стоимость товаров в корзине
 
     private bool _isSelling;// Флаг, указывающий на режим продажи или покупки предметов
-    // Ссылки на систему магазина и инвентарь игрока
-    private ShopSystem _shopSystem;
+    
+    private ShopSystem _shopSystem;// Ссылки на систему магазина и инвентарь игрока
     private InventoryHolder _playerInventoryHolder;
     // Словарь содержимого корзины покупок (предмет-количество)
     private Dictionary<InventoryItemData, int> _shoppingCart = new Dictionary<InventoryItemData, int>();

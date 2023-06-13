@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public class SaveData
 {
+    public PlayerListData playerListData;
     public InventorySaveData playerInventory;
-    public CharacterSaveDataList playerCharList;
-    public SerializableDictionary<string, ChestSaveData> chestDictionary;    
+    public SerializableDictionary<string, ChestLootData> chestLootData;
+
     public SaveData()
-    {   
+    {
+        playerListData = new PlayerListData();
         playerInventory = new InventorySaveData();
-        playerCharList = new CharacterSaveDataList();
-        chestDictionary = new SerializableDictionary<string, ChestSaveData>();        
+        chestLootData = new SerializableDictionary<string, ChestLootData>();
     }
 }
