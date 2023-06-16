@@ -28,10 +28,10 @@ public class ChestInventory : MonoBehaviour, IInteractable
     }   
     private void LoadChestLoot(SaveData data)
     {
-       if (data.chestLootData.TryGetValue(GetComponent<UniqueID>().ID, out ChestLootData chestData))
-        {
-           _inventory = chestData.chestLoot;
-        }
+       //if (data.chestLootData.TryGetValue(GetComponent<UniqueID>().ID, out ChestLootData chestData))
+       // {
+       //    _inventory = chestData.chestLoot;
+       // }
     }
 
     public void Interact(ActionController interactor, out bool interactSuccessful)

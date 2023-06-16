@@ -9,7 +9,10 @@ public class Gate : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            LocationManager.Instance.MovePlayer(_sceneName, _spawnPoint);
+            var holder = other.GetComponent<InventoryHolder>();            
+
+            
+            LocationManager.Instance.MovePlayer(_sceneName, _spawnPoint, holder);
         }
     }
 }

@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -14,7 +12,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private ChestDisplay _chestDisplay;
     [SerializeField] private LootDisplay _lootDisplay;
     [SerializeField] private ShopKeeperDisplay _shopKeeperDisplay;
-    
+    public SceneLoader _sceneLoader;
+    public InventoryHolder _holder;
     private bool _inventoryEnable = false;
 
     private void Awake()
@@ -24,7 +23,7 @@ public class UIController : MonoBehaviour
         _chestDisplay.gameObject.SetActive(false);
         _shopKeeperDisplay.gameObject.SetActive(false);
         _lootDisplay.gameObject.SetActive(false);
-
+        _sceneLoader = FindAnyObjectByType<SceneLoader>();
 
     }
     private void OnEnable()
@@ -94,7 +93,13 @@ public class UIController : MonoBehaviour
     }
     public void ToMainMenu()
     {
-        SceneManager.LoadSceneAsync(0);
+        _sceneLoader.Position = _holder.CurrentCoordinats;
+        _holder.Inventory.SetLocation(_sceneLoader.Location);
+        _holder.Inventory.SetCoord(_sceneLoader.Position);
+
+        SaveAndLoadManager.SaveInventory();
+
+        SceneManager.LoadSceneAsync(1);
     }
 
 }

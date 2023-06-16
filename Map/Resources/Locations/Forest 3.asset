@@ -15,8 +15,8 @@ MonoBehaviour:
   locationName: Forest 3
   spawnPoints:
   - nameSpawn: SW
-    spawnPoint: {x: 38.46, y: 185.461, z: -156.17}
+    spawnPoint: {x: 27.33875, y: 5.000305, z: 5.462936}
   - nameSpawn: SE
-    spawnPoint: {x: 104.84, y: 180.46, z: -119.38}
+    spawnPoint: {x: 93.71875, y: 0, z: 42.25294}
   - nameSpawn: NE
-    spawnPoint: {x: 23.58, y: 180.46, z: -68.02}
+    spawnPoint: {x: 12.45875, y: 0, z: 93.61294}

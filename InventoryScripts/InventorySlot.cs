@@ -31,33 +31,7 @@ public class InventorySlot : ItemSlot, ISerializationCallbackReceiver
     public InventorySlot() //создает пустой слот инвентаря
     {
         ClearSlot();
-    }
-    //public void AssignSlot(InventorySlot invSlot) // назначает предмет в слот
-    //{
-    //    if (_itemData == invSlot.ItemData) AddToStack(invSlot._stackSize); // Проверка на наличие в слоте предмета 
-    //    else
-    //    {
-    //        _itemData = invSlot._itemData;
-    //        _itemID = _itemData.ID;
-    //        _tier = _itemData.Tier;
-    //        _nameItem = _itemData.DisplayName;
-    //        _stackSize = 0;
-    //        _slotType = _itemData.SlotType;
-    //        _itemType = _itemData.ItemType;
-
-    //        _ip = _itemData.ItemPower;
-    //        _hp = _itemData.Health;
-    //        _mp = _itemData.Mana;
-    //        _pd = _itemData.PhysicDamage;
-    //        _md = _itemData.MagicDamage;
-    //        _pdef = _itemData.PhysicDefence;
-    //        _mdef = _itemData.MagicDefence;
-    //        _hpRec = _itemData.HealthRecovery;
-    //        _mpRec = _itemData.ManaRecovery;
-    //        AddToStack(invSlot._stackSize);
-           
-    //    }
-    //}
+    }  
     public void UpdateInventorySlot(InventoryItemData data, int amount) //Обновление слота
     {
         _itemData = data;
@@ -118,11 +92,6 @@ public class InventorySlot : ItemSlot, ISerializationCallbackReceiver
         
     }
     
-    public void SetNameSlotOnHolder(string nameSlot, GameObject equipobj, InventorySlot_UI slotUI)
-    {
-        _nameSlot = nameSlot;
-        _equipObject = equipobj;
-        _equipSlotUI = slotUI;
-    }
+   
 }
 

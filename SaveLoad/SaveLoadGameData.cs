@@ -9,13 +9,15 @@ using System.IO;
 using System;
 
 public static class SaveLoadGameData
-{
+{   
+
     public static UnityAction OnSaveCharListData;
-    public static UnityAction<SaveData> OnLoadCharListData;
+    public static UnityAction<ListSaveData> OnLoadCharListData;
+
     public static UnityAction OnSaveData;
     public static UnityAction<SaveData> OnLoadData;
     
-    public static void SaveCharacterList(SaveData data)
+    public static void SaveCharacterList(ListSaveData data)
     {
         OnSaveCharListData?.Invoke();       
 
@@ -26,12 +28,8 @@ public static class SaveLoadGameData
                 {"Characters", JsonUtility.ToJson(data.playerListData)}
             }
         };
-        PlayFabClientAPI.UpdateUserData(request, OnSaveCharacterListSuccess, OnSaveCharacterListFailure);
-    }
-    private static void OnSaveCharacterListSuccess(UpdateUserDataResult result)
-    {
-        //Debug.Log("Character list saved");
-    }
+        PlayFabClientAPI.UpdateUserData(request, null, OnSaveCharacterListFailure);        
+    }   
     private static void OnSaveCharacterListFailure(PlayFabError error)
     {
         Debug.Log(error.ErrorDetails);
@@ -43,7 +41,7 @@ public static class SaveLoadGameData
     }
     private static void OnLoadCharacterListSuccess(GetUserDataResult result)
     {
-        SaveData data = new SaveData();
+        ListSaveData data = new ListSaveData();
 
         if (result.Data != null && result.Data.ContainsKey("Characters"))
         {
@@ -59,7 +57,7 @@ public static class SaveLoadGameData
     }
     public static void SaveCharacterInventory(SaveData data)
     {
-        OnSaveData?.Invoke();        
+        OnSaveData?.Invoke();       
 
         var request = new UpdateUserDataRequest
         {
@@ -68,38 +66,47 @@ public static class SaveLoadGameData
                 {data.playerInventory.InvSys.Name, JsonUtility.ToJson(data.playerInventory) }
             }
         };
-        PlayFabClientAPI.UpdateUserData(request, OnSaveCharacterInventorySuccess, OnSaveCharacterInventoryFailure);
+        PlayFabClientAPI.UpdateUserData(request, null, OnSaveCharacterInventoryFailure);
     }
-    public static void LoadCharacterInventory()
+    public static void LoadCharacterInventory(string name)
     {
+        
         var request = new GetUserDataRequest();
-        PlayFabClientAPI.GetUserData(request, OnLoadCharacterInventorySuccess, OnLoadCharacterInventoryFailure);
+        PlayFabClientAPI.GetUserData(request, result => OnLoadCharacterInventorySuccess(result, name), OnLoadCharacterInventoryFailure);
     }
-    private static void OnLoadCharacterInventorySuccess(GetUserDataResult result)
+    private static void OnLoadCharacterInventorySuccess(GetUserDataResult result, string name)
     {
-        SaveData data = new SaveData();
+        SaveData data = new SaveData();        
 
-        if (result.Data != null && result.Data.ContainsKey(PlayerCharListScene._activCharacterPreview))
+        if (result.Data != null && result.Data.ContainsKey(name))
         {
-            string json = result.Data[PlayerCharListScene._activCharacterPreview].Value;
+            string json = result.Data[name].Value;
             data.playerInventory = JsonUtility.FromJson<InventorySaveData>(json);
             OnLoadData?.Invoke(data);
-            Debug.Log(data.playerInventory.InvSys.Name);
         }
-    }
-
-    private static void OnLoadCharacterInventoryFailure(PlayFabError error)
-    {
-        Debug.Log(error.ErrorDetails);
-    }
-    
-    private static void OnSaveCharacterInventorySuccess(UpdateUserDataResult result)
-    {
-        //Debug.Log("Character inventory saved");
+        else
+        {
+            Debug.Log("Key not found: " + name);
+        }
     }
     private static void OnSaveCharacterInventoryFailure(PlayFabError error)
     {
         Debug.Log(error.ErrorDetails);
+    }
+    private static void OnLoadCharacterInventoryFailure(PlayFabError error)
+    {
+        Debug.Log(error.ErrorDetails);
+    }
+
+    public  static void DeleteCharacter()
+    {
+        var request = new GetUserDataRequest();
+        PlayFabClientAPI.GetUserData(request, DeleteSuccess, null);
+    }
+
+    private static void DeleteSuccess(GetUserDataResult result)
+    {
+        
     }
 }
 

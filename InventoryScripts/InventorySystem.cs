@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [System.Serializable]
 public class InventorySystem
 {
-    [SerializeField] protected string _acc;
+    
     [SerializeField] protected string _name;
     [SerializeField] protected string _location;
     [SerializeField] protected int _coins;
@@ -52,7 +52,7 @@ public class InventorySystem
     public int MPRec => _mpRec;
     public Vector3 SpawnCoord => _spawnCoords;
     public Vector3 CurrentCoordinats => _curentCoordinats;
-    
+    public SkinnedMeshRenderer Skin => _playerSkin;
     public InventoryHolder Holder => _holder;
 
     [SerializeField] protected List<InventorySlot> _inventorySlots;
@@ -66,10 +66,10 @@ public class InventorySystem
     public int BeltSlotsCount => BeltSlots.Count;
 
     public UnityAction<InventorySlot> OnInventorySlotChanged;
-    public InventorySystem(int bagSlots, int equpslots, int beltsslots, string acc, string name, string location, int coins, int ip, int hp, int mp, int pd, int md, float @as, float ms,
+    public InventorySystem(int bagSlots, int equpslots, int beltsslots, string name, string location, int coins, int ip, int hp, int mp, int pd, int md, float @as, float ms,
         int pdef, int mdef, int hpValue, int mpValue, int hpRec, int mpRec, Vector3 lastCoordinats, Vector3 curentCoordinats, SkinnedMeshRenderer playerSkin, InventoryHolder holder)
     {
-        _acc = acc;
+        
         _name = name;
         _location = location;
         _coins = coins;
@@ -92,12 +92,18 @@ public class InventorySystem
         _holder = holder;
 
         CreatePlayerInventory(bagSlots, equpslots, beltsslots);
-        _holder = holder;
+        
     }
 
     public InventorySystem(int slot)
     {
         CreateInventory(slot);
+    }
+
+    public void SetSkinAndHolder(SkinnedMeshRenderer skin, InventoryHolder holder)
+    {
+        _playerSkin = skin;
+        _holder = holder;
     }
 
     private void CreatePlayerInventory(int bagslots, int equpslots, int beltsslots)
@@ -318,6 +324,13 @@ public class InventorySystem
         _hpValue -= stats.Health;
         _mpValue -= stats.Mana;
     }
+    public void OnCreate(string name, string location, Vector3 coords)
+    {
+        _name = name;
+        _location = location;
+        _spawnCoords = coords;
+    }
+
 
     public void SetName(string name)
     {
@@ -326,10 +339,14 @@ public class InventorySystem
     public void SetLocation(string location)
     {
         _location = location;
+
+        Debug.Log(_location);
     }
 
     public void SetCoord(Vector3 coords)
     {
         _spawnCoords = coords;
-    }
+
+        Debug.Log(_spawnCoords);
+    }    
 }

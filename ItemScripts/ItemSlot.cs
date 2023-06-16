@@ -116,5 +116,18 @@ public abstract class ItemSlot
     {
         _stackSize -= amount;
         if (_stackSize <= 0) ClearSlot();
-    } 
+    }
+
+    public void SetSlot(string slot, GameObject equipslot, InventorySlot_UI slotUI)
+    {
+        _nameSlot = slot;
+        _equipObject = equipslot;
+        _equipSlotUI = slotUI;
+    }
+
+    public void LoadSlot(GameObject equipslot, InventorySlot_UI slotUI)
+    {
+        _equipObject = equipslot;
+        _equipSlotUI = slotUI;
+    }
 }

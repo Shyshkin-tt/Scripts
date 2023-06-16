@@ -156,7 +156,7 @@ public class NPC : MonoBehaviour
     }
     private void LateUpdate()
     {
-        //_canvas.transform.LookAt(transform.position + Camera.main.transform.forward);
+        _canvas.transform.LookAt(transform.position + Camera.main.transform.forward);
     }
 
     private void Attacking()
@@ -267,7 +267,7 @@ public class NPC : MonoBehaviour
         {
             // Устанавливаем полученную точку патрулирования в приватную переменную
             _targetPoint = navMeshHit.position;
-            Debug.Log("Fail");
+            //Debug.Log("Fail");
             // Устанавливаем случайную точку патрулирования
             _navMesh.SetDestination(_targetPoint);
             return true;

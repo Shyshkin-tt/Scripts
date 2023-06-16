@@ -15,10 +15,10 @@ MonoBehaviour:
   locationName: TownStart
   spawnPoints:
   - nameSpawn: SW
-    spawnPoint: {x: 29.77, y: 5, z: -2.36}
+    spawnPoint: {x: 49.77187, y: 5, z: 17.63707}
   - nameSpawn: NW
-    spawnPoint: {x: -4.09, y: 5, z: 31.23}
+    spawnPoint: {x: 15.91, y: 5, z: 51.23}
   - nameSpawn: SP Tower
-    spawnPoint: {x: 15.08, y: 7.5, z: 18.15}
+    spawnPoint: {x: 35.08, y: 7.5, z: 38.15}
   - nameSpawn: SP Revive
-    spawnPoint: {x: 18.63, y: 7.5, z: 0}
+    spawnPoint: {x: 38.63, y: 7.5, z: 20}

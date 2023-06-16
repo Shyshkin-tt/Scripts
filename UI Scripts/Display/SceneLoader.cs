@@ -1,28 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
-    public GameObject _loadScreen;
-    public Slider _slider;
+    public string Location;
+    public Vector3 Position;
+    public string CharName;
+    public GameObject Char;    
 
-    public void LoadScene(int level)
+    private void Awake()
     {
-        StartCoroutine(LoadSceneAsynch(level));
-
+        
     }
 
-    IEnumerator LoadSceneAsynch(int level)
+    public void SetStats(string loc, Vector3 spawn, string name)
     {
-        AsyncOperation aop = SceneManager.LoadSceneAsync(level);
-        _loadScreen.SetActive(true);
-        while (!aop.isDone)
-        {
-            _slider.value = aop.progress;
-            yield return null;
-        }
+        Location = loc;
+        Position = spawn;
+        CharName = name;
     }
+
+    private void Start()
+    {
+        DontDestroyOnLoad(this);        
+    }
+    
+    
 }

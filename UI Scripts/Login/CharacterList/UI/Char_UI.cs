@@ -19,36 +19,26 @@ public class Char_UI : MonoBehaviour
         ParentDisplay = transform.parent.GetComponentInParent<PlayerCharListScene>();
         ActivChar();
     }
-    public void Sets(string name, string gender, string locaton)
+    public void Sets(string name, string gender, string location)
     {
         _name.text = name;
         _gender.text = gender;
-        _location.text = locaton;     
+        _location.text = location;     
     }
 
     public void DeleteCharUI()
     {
-        var index = transform.GetSiblingIndex();
-        ParentDisplay._playerCharList.CharCreator.DeleteCharFromList(index);
-        ParentDisplay.DeleteChar();
+        var index = transform.GetSiblingIndex();        
+        ParentDisplay.DeleteChar(index);
         Destroy(this.transform.gameObject);
         ParentDisplay.ActivCharScreenSet("");
-        SaveAndLoadManager.SaveCharList();
+        var loader = FindObjectOfType<SceneLoader>();
+        Destroy(loader.transform.gameObject);
     }
 
 
     public void ActivChar()
     {
-        ParentDisplay.ActivCharScreenSet(_name.text);
-
-        if (ParentDisplay._previewCharacter.transform.childCount == 0)
-        {
-            ParentDisplay.CreateChars(_name.text, _gender.text, _location.text);
-        }
-        else if (ParentDisplay._previewCharacter.transform.childCount == 1)
-        {
-            ParentDisplay.DeleteChar();
-            ParentDisplay.CreateChars(_name.text, _gender.text, _location.text);
-        }
+        ParentDisplay.ActivCharScreenSet(_name.text);       
     }
 }

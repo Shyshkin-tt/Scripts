@@ -33,7 +33,7 @@ public class ActionController : MonoBehaviour
     private void Awake()
     {
         ResetTargetPoint();
-        _camera = Camera.main;
+        
         _input = new PlayerController();
         _ground = LayerMask.NameToLayer("Ground");
         _char = GetComponent<CharacterController>();
