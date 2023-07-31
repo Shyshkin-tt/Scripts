@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class SaveData
 {    
-    public InventorySaveData playerInventory;
+    public InventorySaveData playerInventory;    
     public SerializableDictionary<string, ChestLootData> chestLootData;
+
     public SaveData()
     {        
-        playerInventory = new InventorySaveData();
+        playerInventory = new InventorySaveData();        
         chestLootData = new SerializableDictionary<string, ChestLootData>();
     }
 }
@@ -19,5 +20,15 @@ public class ListSaveData
     public ListSaveData()
     {
         playerListData = new PlayerListData();
+    }
+}
+
+public class PlayerExperienceSave
+{
+    public ExperienceSaveData playerExperience;
+
+    public PlayerExperienceSave()
+    {
+        playerExperience = new ExperienceSaveData();
     }
 }

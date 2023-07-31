@@ -7,10 +7,11 @@ using UnityEngine.Events;
 [System.Serializable]
 public class InventorySystem
 {
-    
     [SerializeField] protected string _name;
     [SerializeField] protected string _location;
+    [Header("____________________________________")]
     [SerializeField] protected int _coins;
+    [Header("____________________________________")]
     [SerializeField] protected int _ip;
     [SerializeField] protected int _hp;
     [SerializeField] protected int _mp;
@@ -24,10 +25,10 @@ public class InventorySystem
     [SerializeField] protected int _mpValue;
     [SerializeField] protected int _hpRec;
     [SerializeField] protected int _mpRec;
-
+    [Header("____________________________________")]
     [SerializeField] protected Vector3 _spawnCoords;
     [SerializeField] protected Vector3 _curentCoordinats;
-
+    [Header("____________________________________")]
     [SerializeField] protected SkinnedMeshRenderer _playerSkin;
     [SerializeField] protected InventoryHolder _holder;
 
@@ -65,7 +66,9 @@ public class InventorySystem
     public int EquipSlotsCount => EquipSlots.Count;
     public int BeltSlotsCount => BeltSlots.Count;
 
+    public static UnityAction OnEquipSlotChanged;
     public UnityAction<InventorySlot> OnInventorySlotChanged;
+
     public InventorySystem(int bagSlots, int equpslots, int beltsslots, string name, string location, int coins, int ip, int hp, int mp, int pd, int md, float @as, float ms,
         int pdef, int mdef, int hpValue, int mpValue, int hpRec, int mpRec, Vector3 lastCoordinats, Vector3 curentCoordinats, SkinnedMeshRenderer playerSkin, InventoryHolder holder)
     {
@@ -339,14 +342,10 @@ public class InventorySystem
     public void SetLocation(string location)
     {
         _location = location;
-
-        Debug.Log(_location);
     }
 
     public void SetCoord(Vector3 coords)
     {
         _spawnCoords = coords;
-
-        Debug.Log(_spawnCoords);
     }    
 }

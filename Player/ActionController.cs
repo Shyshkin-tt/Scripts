@@ -4,14 +4,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
+using Unity.Netcode;
 
-public class ActionController : MonoBehaviour
+public class ActionController : NetworkBehaviour
 {
     [SerializeField] private PlayerController _input;
     [SerializeField] private CharacterController _char;
     [SerializeField] private InventoryHolder _inv;
     [SerializeField] private Animator _anim;
+    [SerializeField] private Animation _playerAnim;
     [SerializeField] private MakeDamage _hitBox;
+
+    public GameObject _bulletSpawn;
 
     public Camera _camera;
     public Vector3 _targetPoint;
@@ -38,6 +42,7 @@ public class ActionController : MonoBehaviour
         _ground = LayerMask.NameToLayer("Ground");
         _char = GetComponent<CharacterController>();
         _anim = GetComponent<Animator>();
+        _playerAnim = GetComponent<Animation>();
         _inv = GetComponent<InventoryHolder>();
         _objects = LayerMask.NameToLayer("Objects");
     }
@@ -176,7 +181,15 @@ public class ActionController : MonoBehaviour
             Rotation();
             StopMove();
             _anim.SetTrigger("Attack");
-            _hitBox._canHit = true;
+
+            var gunType = _playerAnim.ItemType;
+
+            if (gunType == "1H_gun" || gunType == "2H_gun")
+            {
+                var gun = _inv.Inventory.EquipSlots[3].OnEquip.GetComponentInChildren<GunShoot>();
+                gun.MakeShoot();
+            }
+            else _hitBox._canHit = true;
         }
     }
 

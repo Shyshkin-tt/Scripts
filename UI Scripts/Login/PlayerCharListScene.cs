@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System;
 using System.Collections;
-using UnityEngine.WSA;
+
 
 [System.Serializable]
 public class PlayerCharListScene : MonoBehaviour
@@ -166,6 +166,7 @@ public class PlayerCharListScene : MonoBehaviour
             {
                 GameObject charPreview = Instantiate(_malePrefab, _previewCharacter.transform);
                 SaveAndLoadManager.LoadInventory(name);
+                SaveAndLoadManager.LoadPlayerXP();
                 charPreview.name = name;
                 var holder = _previewCharacter.GetComponentInChildren<InventoryHolder>();
 
@@ -175,6 +176,7 @@ public class PlayerCharListScene : MonoBehaviour
             {
                 GameObject charPreview = Instantiate(_femalePrefab, _previewCharacter.transform);
                 SaveAndLoadManager.LoadInventory(name);
+                SaveAndLoadManager.LoadPlayerXP();
                 charPreview.name = name;
                 var holder = _previewCharacter.GetComponentInChildren<InventoryHolder>();
 
@@ -232,7 +234,7 @@ public class PlayerCharListScene : MonoBehaviour
         {
             if (location.locationName == loc)
             {                
-                return location.spawnPoints[0].spawnPoint; // ������������, ��� ��������� ������� ����� ������ ���� ����� ������
+                return location.spawnPoints[0].spawnPoint.transform.position; // ������������, ��� ��������� ������� ����� ������ ���� ����� ������
             }
         }
         return Vector3.zero;
@@ -271,6 +273,7 @@ public class PlayerCharListScene : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         SaveAndLoadManager.SaveInventory();
+        SaveAndLoadManager.SavePlayerXP();
         yield break;
     }  
     private IEnumerator ListCheck()

@@ -12,7 +12,9 @@ public class Animation : MonoBehaviour
     private ActionController _moving;
     private InventoryItemData _itemData;
     private InventoryHolder _holder;
-    public string _itemType;
+    [SerializeField] private string _itemType;
+
+    public string ItemType => _itemType;
 
     private void Awake()
     {
@@ -47,6 +49,8 @@ public class Animation : MonoBehaviour
         _animator.SetBool("1H", _itemType == "1H_Weapon");
         _animator.SetBool("2H", _itemType == "2H_Weapon");
         _animator.SetBool("Polearm", _itemType == "Polearm");
+        _animator.SetBool("1H_gun", _itemType == "1H_gun");
+        _animator.SetBool("2H_gun", _itemType == "2H_gun");
     }
 
 

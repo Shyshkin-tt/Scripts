@@ -9,6 +9,7 @@ public class InventoryItemData : ScriptableObject
     public int Tier;
     public string DisplayName;
     public string ItemType;
+    public string ItemClass;
     public string SlotType;
     public string EquipSlotype;
 
@@ -32,6 +33,4 @@ public class InventoryItemData : ScriptableObject
     public int MagicDefence;
     public int HealthRecovery;
     public int ManaRecovery;
-
-
 }

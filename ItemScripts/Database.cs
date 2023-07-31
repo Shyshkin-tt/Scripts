@@ -6,16 +6,51 @@ using Unity.VisualScripting;
 
 [CreateAssetMenu(menuName = "Inventory System/Item Database")]
 public class Database : ScriptableObject
-{// Список всех предметов в базе данных
+{
+    // Список всех предметов в базе данных
     [SerializeField] private List<InventoryItemData> _itemDatabase;
+    [SerializeField] private List<InventoryItemData> _rerourcesDatabase;
+    [SerializeField] private List<InventoryItemData> _materialsDatabase;
+
+
+    [ContextMenu("Set all IDs")]
+    public void SetAllIDs()
+    {
+        _itemDatabase = new List<InventoryItemData>();
+
+        string[] folders = { "ItemData", "Resources", "Materials" };
+        foreach (string folder in folders)
+        {
+            LoadAndSetIDs(folder);
+        }
+    }
+
     // Метод для установки ID предметов в базе данных
-    [ContextMenu("Set IDs")]
+    [ContextMenu("Set items IDs")]
     public void SetItemIDs()
     {
-        // Метод для установки ID предметов в базе данных
         _itemDatabase = new List<InventoryItemData>();
+        LoadAndSetIDs("ItemData");
+    }
+
+    [ContextMenu("Set resources IDs")]
+    public void SetResourcesIDs()
+    {
+        _rerourcesDatabase = new List<InventoryItemData>();
+        LoadAndSetIDs("Resi");
+    }
+
+    [ContextMenu("Set materials IDs")]
+    public void SetMaterialsIDs()
+    {
+        _materialsDatabase = new List<InventoryItemData>();
+        LoadAndSetIDs("Materials");
+    }
+
+    private void LoadAndSetIDs(string folderName)
+    {
         // Загрузка всех предметов из папки "ItemData" в ресурсах и сортировка по ID
-        var foundItems = Resources.LoadAll<InventoryItemData>("ItemData").OrderBy(i => i.ID).ToList();
+        var foundItems = Resources.LoadAll<InventoryItemData>(folderName).OrderBy(i => i.ID).ToList();
         // Фильтрация предметов, у которых есть ID в допустимом диапазоне и сортировка их по ID
         var hasIDInRange = foundItems.Where(i => i.ID != -1 && i.ID < foundItems.Count).OrderBy(i => i.ID).ToList();
         // Фильтрация предметов, у которых есть ID, но он находится за пределами допустимого диапазона и сортировка их по ID
@@ -55,7 +90,10 @@ public class Database : ScriptableObject
     {
         return _itemDatabase.Find(i => i.ID == id);
     }
-
+    public InventoryItemData GetItemClass(string name)
+    {
+        return _itemDatabase.Find(i => i.DisplayName == name);
+    }
     public InventoryItemData GetItemName(string name)
     {
         return _itemDatabase.Find(i => i.DisplayName == name);

@@ -16,6 +16,7 @@ MonoBehaviour:
   Tier: 1
   DisplayName: Simple Shield
   ItemType: OffHeand
+  ItemClass: Shield
   SlotType: EquipSlot
   EquipSlotype: LHand
   Description: 

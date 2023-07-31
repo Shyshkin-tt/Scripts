@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 5
   Tier: 1
-  DisplayName: Leather Boots
+  DisplayName: Simple Leather Shoes
   ItemType: Shoes
+  ItemClass: Leather Shoes
   SlotType: EquipSlot
   EquipSlotype: Shoes
   Description: 

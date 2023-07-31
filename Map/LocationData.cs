@@ -7,7 +7,7 @@ public class LocationData : ScriptableObject
     public class SpawnPoint
     {
         public string nameSpawn;
-        public Vector3 spawnPoint;
+        public GameObject spawnPoint;
     }
 
     public string locationName;
@@ -18,7 +18,7 @@ public class LocationData : ScriptableObject
         Vector3[] coordinates = new Vector3[spawnPoints.Length];
         for (int i = 0; i < spawnPoints.Length; i++)
         {
-            coordinates[i] = spawnPoints[i].spawnPoint;
+            coordinates[i] = spawnPoints[i].spawnPoint.transform.position;
         }
         return coordinates;
     }

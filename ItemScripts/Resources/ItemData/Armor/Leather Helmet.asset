@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 4
   Tier: 1
-  DisplayName: Leather Helmet
+  DisplayName: Simple Leather Head
   ItemType: Head
+  ItemClass: Leather Head
   SlotType: EquipSlot
   EquipSlotype: Head
   Description: 

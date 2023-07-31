@@ -13,6 +13,7 @@ public class InventorySlot : ItemSlot, ISerializationCallbackReceiver
         _itemID = _itemData.ID;
         _tier = _itemData.Tier;
         _nameItem = _itemData.DisplayName;
+        _classItem = _itemData.ItemClass;
         _stackSize = amount;
         _slotType = _itemData.SlotType;
         _itemType = _itemData.ItemType;
@@ -38,6 +39,7 @@ public class InventorySlot : ItemSlot, ISerializationCallbackReceiver
         _itemID = _itemData.ID;
         _tier = _itemData.Tier;
         _nameItem = _itemData.DisplayName;
+        _classItem = _itemData.ItemClass;
         _stackSize = amount;
         _slotType = _itemData.SlotType;
         _itemType = _itemData.ItemType;
@@ -80,18 +82,5 @@ public class InventorySlot : ItemSlot, ISerializationCallbackReceiver
         splitStack = new InventorySlot(_itemData, halfStack); //создание копии с половиной стака
         return true;
     }
-    public void OnBeforeSerialize()
-    {
-
-    }
-    public void OnAfterDeserialize()
-    {
-        if (_itemID == -1) return;// если предмет отсутствует, то ничего не делаем
-        var db = Resources.Load<Database>("Database");// загружаем базу данных
-        _itemData = db.GetItem(_itemID);// получаем данные о предмете по его ID
-        
-    }
-    
-   
 }
 

@@ -5,11 +5,12 @@ using System;
 
 
 // Класс для хранения данных предмета в слоте инвентаря
-public abstract class ItemSlot
+public abstract class ItemSlot : ISerializationCallbackReceiver
 {
     [NonSerialized] protected InventoryItemData _itemData;
     [SerializeField] protected string _nameSlot;
     [SerializeField] protected string _nameItem;
+    [SerializeField] protected string _classItem;
     [SerializeField] protected GameObject _equipObject;
     [SerializeField] protected InventorySlot_UI _equipSlotUI;
     [SerializeField] protected int _itemID = -1;
@@ -28,19 +29,17 @@ public abstract class ItemSlot
     [SerializeField] protected int _mdef;
     [SerializeField] protected int _hpRec;
     [SerializeField] protected int _mpRec;
-
-
-    public InventoryItemData ItemData => _itemData;// Геттер для доступа к приватному полю itemData
-    
+    public InventoryItemData ItemData => _itemData;// Геттер для доступа к приватному полю itemData    
     public string NameSlot => _nameSlot;
     public string NameItem => _nameItem;
+    public string ClassItem => _classItem;
     public GameObject OnEquip => _equipObject;
     public int StackSize => _stackSize;// Геттер для доступа к приватному полю stackSize
-
     public void ClearSlot()// Очищает слот
     {
         _itemData = null;
         _nameItem = "";
+        _classItem = "";
         _itemID = -1;
         _stackSize = -1;
         _slotType = "";
@@ -65,6 +64,7 @@ public abstract class ItemSlot
             _itemData = invSlot._itemData; // Присваивает новый предмет
             _itemID = _itemData.ID; // Присваивает новый идентификатор предмета
             _nameItem = _itemData.DisplayName;
+            _classItem = _itemData.ItemClass;
             _stackSize = 0;
             _slotType = _itemData.SlotType;
             _itemType = _itemData.ItemType;
@@ -91,6 +91,7 @@ public abstract class ItemSlot
             _itemData = data; // Присваивает новый предмет
             _itemID = data.ID; // Присваивает новый идентификатор предмета
             _nameItem = data.DisplayName;
+            _classItem = data.ItemClass;
             _stackSize = 0;
             _slotType = data.SlotType;
             _itemType = data.ItemType;
@@ -129,5 +130,16 @@ public abstract class ItemSlot
     {
         _equipObject = equipslot;
         _equipSlotUI = slotUI;
+    }
+    public void OnBeforeSerialize()
+    {
+
+    }
+    public void OnAfterDeserialize()
+    {
+        if (_itemID == -1) return;// если предмет отсутствует, то ничего не делаем
+        var db = Resources.Load<Database>("ItemDatabase");// загружаем базу данных
+        _itemData = db.GetItem(_itemID);// получаем данные о предмете по его ID
+
     }
 }

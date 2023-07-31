@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   locationName: TownStart
   spawnPoints:
-  - nameSpawn: SW
-    spawnPoint: {x: 49.77187, y: 5, z: 17.63707}
+  - nameSpawn: NE
+    spawnPoint: {fileID: 6732370113833978657, guid: cae2c67e4ed9365468b75529cdb0a792, type: 3}
   - nameSpawn: NW
-    spawnPoint: {x: 15.91, y: 5, z: 51.23}
+    spawnPoint: {fileID: 7876374512529180077, guid: e6de75a21c44e094a846cc9f59999b3c, type: 3}
   - nameSpawn: SP Tower
-    spawnPoint: {x: 35.08, y: 7.5, z: 38.15}
+    spawnPoint: {fileID: 7906779847442034389, guid: 12dcd1411d631a047b2d7a397ea93e95, type: 3}
   - nameSpawn: SP Revive
-    spawnPoint: {x: 38.63, y: 7.5, z: 20}
+    spawnPoint: {fileID: 3887627601260867729, guid: ffdb85b5bef2db44b903756bbf09021a, type: 3}

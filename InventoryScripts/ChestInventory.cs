@@ -17,22 +17,22 @@ public class ChestInventory : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        SaveLoadGameData.OnLoadData += LoadChestLoot;
+        //SaveLoadGameData.OnLoadData += LoadChestLoot;
     }
     private void Start()
     {
         var chestSaveData = new ChestLootData(Inventory);
-        SaveAndLoadManager._saveData.chestLootData.Add(GetComponent<UniqueID>().ID, chestSaveData);
+        //SaveAndLoadManager._saveData.chestLootData.Add(GetComponent<UniqueID>().ID, chestSaveData);
 
         _inventory = new InventorySystem(_slotsCount);        
     }   
-    private void LoadChestLoot(SaveData data)
-    {
-       //if (data.chestLootData.TryGetValue(GetComponent<UniqueID>().ID, out ChestLootData chestData))
-       // {
-       //    _inventory = chestData.chestLoot;
-       // }
-    }
+    //private void LoadChestLoot(SaveData data)
+    //{
+    //    if (data.chestLootData.TryGetValue(GetComponent<UniqueID>().ID, out ChestLootData chestData))
+    //    {
+    //        _inventory = chestData.chestLoot;
+    //    }
+    //}
 
     public void Interact(ActionController interactor, out bool interactSuccessful)
     {        

@@ -110,7 +110,8 @@ public abstract class InventoryController : MonoBehaviour
                 {
                     inventorySystem.StatMinus(clickedUISlot.AssignedInventorySlot.ItemData);
                     inventorySystem.Holder.RemoveFromPlayer(clickedUISlot.AssignedInventorySlot);
-                    clickedUISlot.ClearSlot();                    
+                    clickedUISlot.ClearSlot();
+                    InventorySystem.OnEquipSlotChanged?.Invoke();
                     return;
                 }
                 else

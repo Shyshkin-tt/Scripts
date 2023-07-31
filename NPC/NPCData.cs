@@ -6,8 +6,8 @@ using UnityEngine;
 public class NPCData : ScriptableObject
 {
     public int ID = -1;
-    public int Tier = 1;
-    public int MobLVL = 1;
+    public int Tier;
+    public int MobLVL;
     public string NPCType;
     public float ZoneAggro;
 
@@ -15,9 +15,28 @@ public class NPCData : ScriptableObject
 
     [Header("Stats")]
     public int HP;
+    public int MP;
     public int PhysicDamage;
-
+    public int MagicDamage;
     public float AttackSpeed;
+
+    [Header("Give to player")]
+    public int XP;
+
+    [Header("Patrol & aggro")]
+    public int PatrolZone;
+    public float PatrolTime;
+    public float AgrroZone;
+
     public float PatrolSpeed;
-    public float RunSpeed;
+    public float AggroSpeed;
+    public float ReturnSpeed = 6f;
+
+    [Header("Loot")]
+    public bool HaveCoins;
+    public int MinCoins;
+    public int MaxCoins;
+
+    public List<InventoryItemData> LootList;
+
 }

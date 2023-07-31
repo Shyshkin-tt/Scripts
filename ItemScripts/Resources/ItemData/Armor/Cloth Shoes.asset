@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 2
   Tier: 1
-  DisplayName: Cloth Shoes
+  DisplayName: Simple Cloth Shoes
   ItemType: Shoes
+  ItemClass: Cloth Shoes
   SlotType: EquipSlot
   EquipSlotype: Shoes
   Description: 

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   Tier: 1
-  DisplayName: Cloth Armor
+  DisplayName: Simple Cloth Armor
   ItemType: Armor
+  ItemClass: Cloth Armor
   SlotType: EquipSlot
   EquipSlotype: Armor
   Description: 

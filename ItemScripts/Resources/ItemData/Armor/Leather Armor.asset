@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 3
   Tier: 1
-  DisplayName: Leather Armor
+  DisplayName: Simple Leather Armor
   ItemType: Armor
+  ItemClass: Leather Armor
   SlotType: EquipSlot
   EquipSlotype: Armor
   Description: 

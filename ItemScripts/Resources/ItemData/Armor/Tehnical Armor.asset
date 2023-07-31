@@ -10,27 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
-  m_Name: Big Sword
+  m_Name: Tehnical Armor
   m_EditorClassIdentifier: 
-  ID: 8
+  ID: 23
   Tier: 1
-  DisplayName: Big Sword
-  ItemType: 2H_Weapon
+  DisplayName: Tehnical Armor
+  ItemType: Armor
+  ItemClass: Plate Armor
   SlotType: EquipSlot
-  EquipSlotype: RHand
+  EquipSlotype: Armor
   Description: 
-  Icon: {fileID: 21300000, guid: efaaa422e78091146860813743436993, type: 3}
+  Icon: {fileID: 21300000, guid: ce3f4c82051edb54c9410612415104af, type: 3}
   MaxStackSize: 1
-  GoldValue: 200
+  GoldValue: 350
   Chance: 60
-  ItemPrefab: {fileID: 7292142431385197505, guid: eccece448de95ef44ba3c84e273669a9, type: 3}
-  ItemPower: 5
-  Health: 15
-  Mana: 5
-  PhysicDamage: 35
+  ItemPrefab: {fileID: 844326722245456246, guid: b2382fc0a985c6943871ff709eafe981, type: 3}
+  ItemPower: 15
+  Health: 43
+  Mana: 2
+  PhysicDamage: 13
   MagicDamage: 0
-  AttackSpeed: 1
-  PhysicDefence: 0
+  AttackSpeed: 0
+  PhysicDefence: 25
   MagicDefence: 0
-  HealthRecovery: 0
+  HealthRecovery: 13
   ManaRecovery: 0

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.WSA;
+
 
 public class LocationManager : MonoBehaviour
 {
@@ -49,6 +49,7 @@ public class LocationManager : MonoBehaviour
         _holder = FindObjectOfType<InventoryHolder>();
         charLoad.gameObject.transform.position = _loader.Position;
         SaveAndLoadManager.LoadInventory(_loader.CharName);
+        SaveAndLoadManager.LoadPlayerXP();
         
         _holder._uiPlayer.SetActive(true);
         
@@ -86,7 +87,7 @@ public class LocationManager : MonoBehaviour
             {
                 if (spawnPointData.nameSpawn == spawnPointName)
                 {
-                    spawnPoint = spawnPointData.spawnPoint;
+                    spawnPoint = spawnPointData.spawnPoint.transform.position;
                     break;
                 }
             }
@@ -100,6 +101,7 @@ public class LocationManager : MonoBehaviour
             holder.Inventory.SetCoord(spawnPoint);
 
             SaveAndLoadManager.SaveInventory();
+            SaveAndLoadManager.SavePlayerXP();
             // Загрузить сцену
             SceneManager.LoadScene(sceneName);
         }

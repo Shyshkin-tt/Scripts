@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 10
   Tier: 1
-  DisplayName: Plate  Armor
+  DisplayName: Simple Plate Armor
   ItemType: Armor
+  ItemClass: Plate Armor
   SlotType: EquipSlot
   EquipSlotype: Armor
   Description: 

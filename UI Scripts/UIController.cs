@@ -98,8 +98,16 @@ public class UIController : MonoBehaviour
         _holder.Inventory.SetCoord(_sceneLoader.Position);
 
         SaveAndLoadManager.SaveInventory();
+        SaveAndLoadManager.SavePlayerXP();
 
         SceneManager.LoadSceneAsync(1);
+    }
+
+    public void InventoryCheck()
+    {
+        if (!_inventoryEnable) _inventoryEnable = true;
+        else if (_inventoryEnable) _inventoryEnable = false;
+        _inventoryDisplay.gameObject.SetActive(_inventoryEnable);
     }
 
 }

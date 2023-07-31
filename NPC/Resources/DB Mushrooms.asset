@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _npcDatabase:
   - {fileID: 11400000, guid: 11029360ef3fed34f8b54833236b5a38, type: 2}
+  - {fileID: 11400000, guid: 99b1e3787a6c9644a9f84b239aec5308, type: 2}

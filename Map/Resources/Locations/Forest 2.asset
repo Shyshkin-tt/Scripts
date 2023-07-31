@@ -15,10 +15,10 @@ MonoBehaviour:
   locationName: Forest 2
   spawnPoints:
   - nameSpawn: SW
-    spawnPoint: {x: 47.02819, y: 5.5, z: 6.279137}
+    spawnPoint: {fileID: 7346451702761086387, guid: eaf6c6aeecf36a848bfdaefe1bbdbacb, type: 3}
   - nameSpawn: SE
-    spawnPoint: {x: 89.59767, y: 5.5, z: 67.79315}
+    spawnPoint: {fileID: 5004560214684376497, guid: a5a0afeb5d1c9e24398fe5850cbe9ce5, type: 3}
   - nameSpawn: 'NE '
-    spawnPoint: {x: 22.36819, y: 10.00031, z: 94.60914}
+    spawnPoint: {fileID: 942129163918605483, guid: 78c275e542eb4a74c8f3cc648e1f015e, type: 3}
   - nameSpawn: NW
-    spawnPoint: {x: 5.948185, y: 10.00031, z: 64.95164}
+    spawnPoint: {fileID: 6527511247827029183, guid: 6537f217e4d7d3740bbb7736d495af69, type: 3}

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
+  m_Name: Demonic 1h sword
+  m_EditorClassIdentifier: 
+  ID: 18
+  Tier: 1
+  DisplayName: Demonic Sword
+  ItemType: 1H_Weapon
+  ItemClass: 1H_Sword
+  SlotType: EquipSlot
+  EquipSlotype: RHand
+  Description: 
+  Icon: {fileID: 21300000, guid: 30dd2bb8dca4a134597109ba97cc0e0e, type: 3}
+  MaxStackSize: 1
+  GoldValue: 150
+  Chance: 60
+  ItemPrefab: {fileID: 5829194397722438164, guid: 640c48d636820394ba8428251d23dc49, type: 3}
+  ItemPower: 5
+  Health: 4
+  Mana: 0
+  PhysicDamage: 31
+  MagicDamage: 0
+  AttackSpeed: 2
+  PhysicDefence: 0
+  MagicDefence: 0
+  HealthRecovery: 0
+  ManaRecovery: 0

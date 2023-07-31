@@ -15,4 +15,4 @@ MonoBehaviour:
   locationName: Start location
   spawnPoints:
   - nameSpawn: StartPoint
-    spawnPoint: {x: 10.55, y: -0.19, z: -113.39}
+    spawnPoint: {fileID: 5574722717047177129, guid: 9bf3d91b515512247a264e88df8e806e, type: 3}

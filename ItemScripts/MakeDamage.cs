@@ -30,7 +30,7 @@ public class MakeDamage : MonoBehaviour
             {
                 _npcList.Add(npc);
                 var damage = transform.parent.GetComponentInParent<InventoryHolder>().Inventory.PDmg;
-                npc.NPCTakeDamage(damage);              
+                npc.NPCCreator.NPCTakeDamage(damage);              
             }            
         }
     }

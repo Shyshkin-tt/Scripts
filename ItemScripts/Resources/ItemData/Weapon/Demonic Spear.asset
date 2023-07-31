@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
+  m_Name: Demonic Spear
+  m_EditorClassIdentifier: 
+  ID: 17
+  Tier: 1
+  DisplayName: Demonic Spear
+  ItemType: Polearm
+  ItemClass: Spear
+  SlotType: EquipSlot
+  EquipSlotype: RHand
+  Description: 
+  Icon: {fileID: 21300000, guid: 0aa8f894de5fec548a70fe6bef534abb, type: 3}
+  MaxStackSize: 1
+  GoldValue: 185
+  Chance: 60
+  ItemPrefab: {fileID: 5069476009508843887, guid: a448365d3de448945a1de5bf98be141d, type: 3}
+  ItemPower: 5
+  Health: 12
+  Mana: 0
+  PhysicDamage: 33
+  MagicDamage: 0
+  AttackSpeed: 2
+  PhysicDefence: 0
+  MagicDefence: 0
+  HealthRecovery: 0
+  ManaRecovery: 0

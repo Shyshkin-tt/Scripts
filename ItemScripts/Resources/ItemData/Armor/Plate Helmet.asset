@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 14
   Tier: 1
-  DisplayName: Plate Helmet
+  DisplayName: Simple Plate Head
   ItemType: Head
+  ItemClass: Plate Head
   SlotType: EquipSlot
   EquipSlotype: Head
   Description: 

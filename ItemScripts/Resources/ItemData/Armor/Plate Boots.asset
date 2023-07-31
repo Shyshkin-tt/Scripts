@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 13
   Tier: 1
-  DisplayName: Plate  Boots
+  DisplayName: Simple Plate Shoes
   ItemType: Shoes
+  ItemClass: Plate Shoes
   SlotType: EquipSlot
   EquipSlotype: Shoes
   Description: 

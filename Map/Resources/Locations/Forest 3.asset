@@ -15,8 +15,8 @@ MonoBehaviour:
   locationName: Forest 3
   spawnPoints:
   - nameSpawn: SW
-    spawnPoint: {x: 27.33875, y: 5.000305, z: 5.462936}
+    spawnPoint: {fileID: 5259613343534358367, guid: db26689f1cda2e14bb195817fd111a8b, type: 3}
   - nameSpawn: SE
-    spawnPoint: {x: 93.71875, y: 0, z: 42.25294}
+    spawnPoint: {fileID: 6318855432026406920, guid: 40f61f196385e9b42a034e67510d2428, type: 3}
   - nameSpawn: NE
-    spawnPoint: {x: 12.45875, y: 0, z: 93.61294}
+    spawnPoint: {fileID: 1712647314516360147, guid: 794f57a3cc6258c41b82e21c74540027, type: 3}

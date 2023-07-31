@@ -7,9 +7,6 @@ public class Coins : MonoBehaviour
 {
     [SerializeField] private int _value;
 
-    public int minValue = 5; // минимальное значение для рандомизации
-    public int maxValue = 15; // максимальное значение для рандомизации
-
     private BoxCollider myCollider;
 
     private InventoryHolder _playerInventoryHolder;
