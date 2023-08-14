@@ -13,11 +13,13 @@ public class InventoryHolder : MonoBehaviour
     public InventoryHolder _holder;
 
 
-    [SerializeField] private List<string> _classList;
-    [SerializeField] private List<string> _itemList;
+    [SerializeField] private List<string> _classList = new List<string>(5); // Инициализируйте с нужным размером
+    [SerializeField] private List<string> _itemList = new List<string>(5); // Инициализируйте с нужным размером
     private string _name = "";
     private string _location = "";
-   
+    private bool _inCombat;
+
+
     private int _coins = 0;
     
     private int _ip = 0;
@@ -31,11 +33,13 @@ public class InventoryHolder : MonoBehaviour
     private int _mdef = 0;
     private int _hpValue = 0;
     private int _mpValue = 0;
-    private int _hpRec = 5;
+    private int _hpRec = 2;
     private int _mpRec = 2;
 
     private Vector3 _spawnCoords;
     private Vector3 _curentCoordinats;
+
+    private float _timeExitCombat;
 
     [Header("____________________________________")]
     public int _inventorySize;
@@ -59,26 +63,43 @@ public class InventoryHolder : MonoBehaviour
     [SerializeField] protected ExperienceSystem _experience;
     public ExperienceSystem Experience => _experience;
 
-    public static UnityAction OnInventorySlotChanged;   
+    public static UnityAction OnInventorySlotChanged;
+    
 
     protected virtual void Awake()
     {
         SaveLoadGameData.OnLoadData += LoadInventory;
         SaveLoadGameData.OnLoadPayerXP += LoadPlayerXP;
         InventorySystem.OnEquipSlotChanged += GetCurrentItems;
+        ExperienceSystem.LvlUp += ChangeBonusStats;
+
 
         playerSkin = GetComponentInChildren<SkinnedMeshRenderer>();
 
-        _inventory = new InventorySystem(_inventorySize, _equipSlots, _bagSlots, _name, _location, _coins, _ip, _hp, _mp, _pd, _md, _as, _ms,
+        _inventory = new InventorySystem(_inventorySize, _equipSlots, _bagSlots, _name, _location, _inCombat, _timeExitCombat, _coins, _ip, _hp, _mp, _pd, _md, _as, _ms,
         _pdef, _mdef, _hpValue, _mpValue, _hpRec, _mpRec, _spawnCoords, _curentCoordinats, playerSkin, _holder);
 
-        _experience = new ExperienceSystem(_totalXp, _itemClassList, _itemNameList, _database);        
+        _experience = new ExperienceSystem(_totalXp, _itemClassList, _database);        
 
         _inventory.SetValue();
 
         if (Inventory.EquipSlots[0].NameSlot == null)
             SetNewSlot();
+    }
 
+    private void ChangeBonusStats(ItemsXP item)
+    {
+        var oldStatsClass = Experience.GetBonusStatsClass(item.NameClass);
+        Inventory.BonusStatMinus(oldStatsClass);
+        //var oldStatsName = Experience.GetBonusStatsName(item.ID);
+        //Inventory.BonusStatMinus(oldStatsName);
+
+        item.UpdateItemBonusStat();
+
+        var newStatsClass = Experience.GetBonusStatsClass(item.NameClass);
+        Inventory.BonusStatAdd(newStatsClass);
+        //var newStatsName = Experience.GetBonusStatsName(item.ID);
+        //Inventory.BonusStatAdd(newStatsName);
     }
     private void GetCurrentItems()
     {
@@ -99,12 +120,17 @@ public class InventoryHolder : MonoBehaviour
     {
         SaveAndLoadManager._saveData.playerInventory = new InventorySaveData(_inventory);
         SaveAndLoadManager._playerXPData.playerExperience = new ExperienceSaveData(_experience);
+
+        UIController.LoadXpForItems?.Invoke();
     }
 
     private void Update()
     {
         _inventory.GetCurentCoords(_holder);
-        _curentCoordinats = _inventory.CurrentCoordinats;        
+        _curentCoordinats = _inventory.CurrentCoordinats;
+
+        if (Inventory.InCombat) Inventory.TimeExitCombatLeft();
+        if (Inventory.LastTimeHit <= 0) Inventory.ExitCombat();
     }
 
     public void SetNameAndLoc(string name, string loc, Vector3 spawn)
@@ -141,9 +167,9 @@ public class InventoryHolder : MonoBehaviour
         foreach (InventoryItemData itemData in data)
         {
             bool itemClassFound = false;
-            bool itemNameFound = false;
+            //bool itemNameFound = false;
 
-            foreach (var itemClass in Experience.ClassItem)
+            foreach (var itemClass in Experience.ItemListClass)
             {
                 if (itemData.ItemClass == itemClass.NameClass)
                 {
@@ -153,23 +179,23 @@ public class InventoryHolder : MonoBehaviour
             }
             if (!itemClassFound)
             {               
-                Experience.AddNewClassItem(itemData.ItemClass);
+                Experience.AddNewClassItem(itemData);
             }
             
 
-            foreach (var itemName in Experience.ItemList)
-            {
-                if (itemData.DisplayName == itemName.NameItem)
-                {
-                    itemNameFound = true;
-                    break;
-                }
-            }
-            if (!itemNameFound)
-            {               
-                Experience.AddNewItem(itemData.ItemClass, itemData.DisplayName);
-                SaveAndLoadManager.SavePlayerXP();
-            }
+            //foreach (var itemName in Experience.ItemListName)
+            //{
+            //    if (itemData.DisplayName == itemName.NameItem)
+            //    {
+            //        itemNameFound = true;
+            //        break;
+            //    }
+            //}
+            //if (!itemNameFound)
+            //{               
+            //    Experience.AddNewItem(itemData);
+            //    SaveAndLoadManager.SavePlayerXP();
+            //}
         }        
     }
     private void LoadSlots()
@@ -195,8 +221,7 @@ public class InventoryHolder : MonoBehaviour
         _inventory.EquipSlots[6].SetSlot("Belt", null, _slotUI[6]);
         _inventory.EquipSlots[7].SetSlot("Shoes", _equipOnPlayer[2], _slotUI[7]);
         _inventory.EquipSlots[8].SetSlot("Bag", null, _slotUI[8]);
-    }
-   
+    }   
     public void EquipOnPlayer(InventorySlot itemData)
     {
         if (itemData.OnEquip != null)
@@ -216,20 +241,17 @@ public class InventoryHolder : MonoBehaviour
     public void RemoveFromPlayer(InventorySlot itemData)
     {      
         Destroy(itemData.OnEquip.transform.GetChild(0).gameObject);
-    }
-
-    public void SetCoordInHolder(Vector3 coords)
-    {
-        _spawnCoords = coords;
-    }
+    }  
 
     public void SaveFromHolder()
-    {        
-        SaveAndLoadManager.SavePlayerXP();        
+    {
+        SaveAndLoadManager.SaveInventory(Inventory.Name);
+        SaveAndLoadManager.SavePlayerXP(Inventory.Name);        
     }
     public void LoadFromHolder()
     {
-        SaveAndLoadManager.LoadPlayerXP();
+        SaveAndLoadManager.LoadInventory(_name);
+        SaveAndLoadManager.LoadPlayerXP(_name);
     }
     public void GetXP(int xp)
     {        
@@ -237,18 +259,31 @@ public class InventoryHolder : MonoBehaviour
 
         foreach (string itemClass in _classList)
         {
-            Experience.GetXpForClass(itemClass, xp);            
+            Experience.GetXpForClass(itemClass, xp);
+            
         }
 
-        foreach (string itemName in _itemList)
-        {
-            Experience.GetXpForItem(itemName, xp);
-        }
+        //foreach (string itemName in _itemList)
+        //{
+        //    Experience.GetXpForItem(itemName, xp);
+        //}
     }
 
     public void GiveTestXP()
     {
-        GetXP(500);
+        GetXP(2000);
+    }
+    public void GiveTestMoreXP()
+    {
+        GetXP(20000);
+    }
+    public void GiveTestLotXP()
+    {
+        GetXP(200000);
+    }
+    public void ExitCombat()
+    {
+        Inventory.ExitCombat();
     }
 }
 

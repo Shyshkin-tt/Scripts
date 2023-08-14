@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Simple 2h Sword
   m_EditorClassIdentifier: 
-  ID: 8
+  ID: 21
   Tier: 1
   DisplayName: Big Sword
   ItemType: 2H_Weapon
-  ItemClass: 2H_Sword
+  ItemClass: Two hand sword
   SlotType: EquipSlot
   EquipSlotype: RHand
   Description: 
@@ -30,7 +30,7 @@ MonoBehaviour:
   Mana: 5
   PhysicDamage: 35
   MagicDamage: 0
-  AttackSpeed: 1
+  AttackSpeed: 0
   PhysicDefence: 0
   MagicDefence: 0
   HealthRecovery: 0

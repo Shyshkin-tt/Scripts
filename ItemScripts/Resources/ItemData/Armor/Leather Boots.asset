@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Leather Boots
   m_EditorClassIdentifier: 
-  ID: 5
+  ID: 4
   Tier: 1
   DisplayName: Simple Leather Shoes
   ItemType: Shoes
-  ItemClass: Leather Shoes
+  ItemClass: Leather shoes
   SlotType: EquipSlot
   EquipSlotype: Shoes
   Description: 

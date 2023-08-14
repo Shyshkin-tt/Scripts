@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
-  m_Name: Tehnical 2h Sword
+  m_Name: Tecnical dagger
   m_EditorClassIdentifier: 
-  ID: 21
+  ID: -1
   Tier: 1
-  DisplayName: Tehnical Big Sword
-  ItemType: 2H_Weapon
-  ItemClass: 2H_Sword
+  DisplayName: Tehnical Dagger
+  ItemType: 1H_Weapon
+  ItemClass: Dagger
   SlotType: EquipSlot
   EquipSlotype: RHand
   Description: 
-  Icon: {fileID: 21300000, guid: 911055d44c9b0544a84e20e8dd948a03, type: 3}
+  Icon: {fileID: 21300000, guid: 795ac337ad3ebc4438ab09b070ec10ac, type: 3}
   MaxStackSize: 1
-  GoldValue: 235
+  GoldValue: 130
   Chance: 60
-  ItemPrefab: {fileID: 278233379901565269, guid: 30a8fdb201e40054ea150df92da87a80, type: 3}
+  ItemPrefab: {fileID: 4028202807063415932, guid: 242cc4b87616db44da93671c1c132cba, type: 3}
   ItemPower: 5
-  Health: 10
-  Mana: 7
-  PhysicDamage: 30
+  Health: 5
+  Mana: 5
+  PhysicDamage: 14
   MagicDamage: 0
-  AttackSpeed: 1
+  AttackSpeed: 0
   PhysicDefence: 0
   MagicDefence: 0
   HealthRecovery: 0

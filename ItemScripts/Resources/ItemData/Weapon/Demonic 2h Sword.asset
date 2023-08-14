@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Demonic 2h Sword
   m_EditorClassIdentifier: 
-  ID: 16
+  ID: 14
   Tier: 1
   DisplayName: Demonic Great Sword
   ItemType: 2H_Weapon
-  ItemClass: 2H_Sword
+  ItemClass: Two hand sword
   SlotType: EquipSlot
   EquipSlotype: RHand
   Description: 
@@ -30,7 +30,7 @@ MonoBehaviour:
   Mana: 0
   PhysicDamage: 41
   MagicDamage: 0
-  AttackSpeed: 1
+  AttackSpeed: 0
   PhysicDefence: 0
   MagicDefence: 0
   HealthRecovery: 0

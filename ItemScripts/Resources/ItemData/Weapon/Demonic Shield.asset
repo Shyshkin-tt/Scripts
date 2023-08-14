@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Demonic Shield
   m_EditorClassIdentifier: 
-  ID: 19
+  ID: 16
   Tier: 1
   DisplayName: Demonic Shield
   ItemType: OffHeand

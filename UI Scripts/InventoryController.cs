@@ -10,15 +10,17 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public abstract class InventoryController : MonoBehaviour
 {
-    [SerializeField] MouseItemData mouseInventoryItem;    
+    [SerializeField] MouseItemData mouseInventoryItem;
 
-    protected InventorySystem inventorySystem;
-    
+    protected InventorySystem _inventorySystem;
+   
+
     protected Dictionary<InventorySlot_UI, InventorySlot> slotDictionary; // Соеденение слотов UI инвентаря со слотами инвентаря
     protected Dictionary<InventorySlot_UI, InventorySlot> equipSlotDictionary;
     protected Dictionary<InventorySlot_UI, InventorySlot> beltSlotDictionary;
     
-    public InventorySystem InventorySystem => inventorySystem;    
+    public InventorySystem InventorySystem => _inventorySystem;
+    
     public Dictionary<InventorySlot_UI, InventorySlot> SlotDictionary => slotDictionary;
     public Dictionary<InventorySlot_UI, InventorySlot> EquiupSlotDictionary => equipSlotDictionary;
     public Dictionary<InventorySlot_UI, InventorySlot> BeltSlotDictionary => beltSlotDictionary;
@@ -73,8 +75,12 @@ public abstract class InventoryController : MonoBehaviour
                     clickedUISlot.AssignedInventorySlot.AssignItem(mouseInventoryItem.AssignedInventorySlot);
                     
                     clickedUISlot.UpdateUISlot();
-                    inventorySystem.Holder.EquipOnPlayer(clickedUISlot.AssignedInventorySlot);
-                    inventorySystem.StatAdd(clickedUISlot.AssignedInventorySlot.ItemData);                    
+                    _inventorySystem.Holder.EquipOnPlayer(clickedUISlot.AssignedInventorySlot);
+
+                    var bonusStatsClass = _inventorySystem.Holder.Experience.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
+
+                    _inventorySystem.StatAdd(clickedUISlot.AssignedInventorySlot.ItemData, bonusStatsClass);                    
+
                     mouseInventoryItem.ClearSlot();                   
                     return;
                 }
@@ -108,8 +114,11 @@ public abstract class InventoryController : MonoBehaviour
 
                 if (clickedUISlot.SlotType == SlotType.EquipSlot)
                 {
-                    inventorySystem.StatMinus(clickedUISlot.AssignedInventorySlot.ItemData);
-                    inventorySystem.Holder.RemoveFromPlayer(clickedUISlot.AssignedInventorySlot);
+                    var bonusStatsClass = _inventorySystem.Holder.Experience.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
+                    
+                    _inventorySystem.StatMinus(clickedUISlot.AssignedInventorySlot.ItemData, bonusStatsClass);
+
+                    _inventorySystem.Holder.RemoveFromPlayer(clickedUISlot.AssignedInventorySlot);
                     clickedUISlot.ClearSlot();
                     InventorySystem.OnEquipSlotChanged?.Invoke();
                     return;
@@ -133,12 +142,20 @@ public abstract class InventoryController : MonoBehaviour
             {
                 if (CheckItemTypesMatch(clickedUISlot.EquipSlotType, mouseInventoryItem.AssignedInventorySlot.ItemData.EquipSlotype))
                 {
+                    var oldBonusStatsClass = _inventorySystem.Holder.Experience.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
+                    _inventorySystem.StatMinus(clickedUISlot.AssignedInventorySlot.ItemData, oldBonusStatsClass);
                     
-                    inventorySystem.StatMinus(clickedUISlot.AssignedInventorySlot.ItemData);
-                    inventorySystem.Holder.RemoveFromPlayer(clickedUISlot.AssignedInventorySlot);
+
+                    _inventorySystem.Holder.RemoveFromPlayer(clickedUISlot.AssignedInventorySlot);
                     SwapSlots(clickedUISlot);
-                    inventorySystem.StatAdd(clickedUISlot.AssignedInventorySlot.ItemData);
-                    inventorySystem.Holder.EquipOnPlayer(clickedUISlot.AssignedInventorySlot);
+
+                    var newBonusStatsClass = _inventorySystem.Holder.Experience.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
+
+                    _inventorySystem.StatAdd(clickedUISlot.AssignedInventorySlot.ItemData, newBonusStatsClass);
+                    _inventorySystem.Holder.EquipOnPlayer(clickedUISlot.AssignedInventorySlot);
+
+                    
+
                     return;
                 }
                 else Debug.Log("Cant do this");

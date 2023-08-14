@@ -78,8 +78,7 @@ public class Login : MonoBehaviour
         }
     }
     private void LoginIn(LoginResult result)
-    {
-        
+    {        
         SceneManager.LoadScene("PlayerCharList");
     }
     public void RegisterButton()
@@ -106,14 +105,12 @@ public class Login : MonoBehaviour
         _warningText.text = "Account created";
         Debug.Log("Account created");
     }
-
     private void OnError(PlayFabError error)
     {
         _warning.SetActive(true);
         _warningText.text = error.ErrorMessage;
         Debug.Log(error.GenerateErrorReport());
     }
-
     public void RrecoveryPassButton()
     {
         var request = new SendAccountRecoveryEmailRequest
@@ -123,7 +120,6 @@ public class Login : MonoBehaviour
         };
         PlayFabClientAPI.SendAccountRecoveryEmail(request, OnPassRecovery, OnError);
     }
-
     private void OnPassRecovery(SendAccountRecoveryEmailResult result)
     {
         _recoveryPanel.SetActive(false);

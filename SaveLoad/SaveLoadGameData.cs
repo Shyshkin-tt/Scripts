@@ -1,13 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
-using Newtonsoft.Json;
 using UnityEngine.Events;
-using System.IO;
-using System;
-
 public static class SaveLoadGameData
 {   
 
@@ -23,13 +18,13 @@ public static class SaveLoadGameData
 
     public static void SaveCharacterList(ListSaveData data)
     {
-        OnSaveCharListData?.Invoke();       
-
+        OnSaveCharListData?.Invoke();
+        string charListJson = JsonUtility.ToJson(data.playerListData);
         var request = new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string>
             {
-                {"Characters", JsonUtility.ToJson(data.playerListData)}
+                {"Characters", charListJson}
             }
         };
         PlayFabClientAPI.UpdateUserData(request, null, OnSaveCharacterListFailure);        
@@ -45,21 +40,22 @@ public static class SaveLoadGameData
     }
     private static void OnLoadCharacterListSuccess(GetUserDataResult result)
     {
-        ListSaveData data = new ListSaveData();
-
         if (result.Data != null && result.Data.ContainsKey("Characters"))
         {
-            string json = result.Data["Characters"].Value;
-            data.playerListData = JsonUtility.FromJson<PlayerListData>(json);
+            string charListJson = result.Data["Characters"].Value;
+            PlayerListData listData = JsonUtility.FromJson<PlayerListData>(charListJson);
+
+            // «агрузка и десериализаци€ списка персонажей
+            ListSaveData data = new ListSaveData();
+            data.playerListData = listData;
             OnLoadCharListData?.Invoke(data);
-            
         }
     }
     private static void OnLoadCharacterListFailure(PlayFabError error)
     {
         Debug.Log(error.ErrorDetails);
     }
-    public static void SaveCharacterInventory(SaveData data)
+    public static void SaveCharacterInventory(SaveData data, string name)
     {
         OnSaveData?.Invoke();       
 
@@ -67,7 +63,7 @@ public static class SaveLoadGameData
         {
             Data = new Dictionary<string, string>
             {
-                {data.playerInventory.InvSys.Name, JsonUtility.ToJson(data.playerInventory) }
+                {name, JsonUtility.ToJson(data.playerInventory) }
             }
         };
         PlayFabClientAPI.UpdateUserData(request, null, OnSaveCharacterInventoryFailure);
@@ -100,25 +96,18 @@ public static class SaveLoadGameData
     private static void OnLoadCharacterInventoryFailure(PlayFabError error)
     {
         Debug.Log(error.ErrorDetails);
-    }
-    public  static void DeleteCharacter()
-    {
-        var request = new GetUserDataRequest();
-        PlayFabClientAPI.GetUserData(request, DeleteSuccess, null);
-    }
-    private static void DeleteSuccess(GetUserDataResult result)
-    {
-        
-    }
-    public static void SaveCharacterXP(PlayerExperienceSave playerXP)
+    }    
+    public static void SaveCharacterXP(PlayerExperienceSave playerXP, string name)
     {
         OnSavePayerXP?.Invoke();
+
+        string charXP = name + " XP";
 
         var request = new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string>
             {
-                {"Character experience", JsonUtility.ToJson(playerXP.playerExperience) }
+                {charXP, JsonUtility.ToJson(playerXP.playerExperience) }
             }
         };
         PlayFabClientAPI.UpdateUserData(request, null, OnSaveCharacterXPFailure);
@@ -127,30 +116,51 @@ public static class SaveLoadGameData
     {
         Debug.Log(error.ErrorDetails);
     }
-
-    public static void LoadCharacterXP()
+    public static void LoadCharacterXP(string name)
     {
 
         var request = new GetUserDataRequest();
-        PlayFabClientAPI.GetUserData(request, result => OnLoadCharacterXPSuccess(result), OnLoadCharacterXPFailure);
+        PlayFabClientAPI.GetUserData(request, result => OnLoadCharacterXPSuccess(result, name), OnLoadCharacterXPFailure);
     }
-
     private static void OnLoadCharacterXPFailure(PlayFabError error)
     {
         Debug.Log(error.ErrorDetails);
     }
-
-    private static void OnLoadCharacterXPSuccess(GetUserDataResult result)
+    private static void OnLoadCharacterXPSuccess(GetUserDataResult result, string name)
     {
         PlayerExperienceSave data = new PlayerExperienceSave();
 
-        if (result.Data != null && result.Data.ContainsKey("Character experience"))
+        string charXP = name + " XP";
+
+        if (result.Data != null && result.Data.ContainsKey(charXP))
         {
-            string json = result.Data["Character experience"].Value;
+            string json = result.Data[charXP].Value;
             data.playerExperience = JsonUtility.FromJson<ExperienceSaveData>(json);
             OnLoadPayerXP?.Invoke(data);
             
         }
+    }
+    public static void DeleteCharacter(string name)
+    {
+        var request = new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string>
+        {
+            { name, null }
+        }
+        };
+        PlayFabClientAPI.UpdateUserData(request, null, null);
+
+        string charXP = name + " XP";
+
+        var requestXP = new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string>
+        {
+            { charXP, null }
+        }
+        };
+        PlayFabClientAPI.UpdateUserData(requestXP, null, null);
     }
 }
 

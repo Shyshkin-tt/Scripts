@@ -28,27 +28,25 @@ public class SaveAndLoadManager : MonoBehaviour
     {
         _playerXPData = playerXP;        
     }
-    public static void SaveInventory()
+    public static void SaveInventory(string name)
     {
         var saveData = _saveData;
        
-        SaveLoadGameData.SaveCharacterInventory(saveData);
+        SaveLoadGameData.SaveCharacterInventory(saveData, name);
     }
     public static void LoadInventory(string name)
     {        
         SaveLoadGameData.LoadCharacterInventory(name);
     }
-    public static void SavePlayerXP()
+    public static void SavePlayerXP(string name)
     {
         var saveData = _playerXPData;        
 
-        SaveLoadGameData.SaveCharacterXP(saveData);
-
-        
+        SaveLoadGameData.SaveCharacterXP(saveData, name);
     }
-    public static void LoadPlayerXP()
+    public static void LoadPlayerXP(string name)
     {
-        SaveLoadGameData.LoadCharacterXP();        
+        SaveLoadGameData.LoadCharacterXP(name);        
     }
 
     private void LoadListData(ListSaveData listData)
@@ -64,5 +62,10 @@ public class SaveAndLoadManager : MonoBehaviour
     public static void LoadCharList()
     {        
         SaveLoadGameData.LoadCharacterList();
+    }
+
+    public static void DeleteChar(string name)
+    {
+        SaveLoadGameData.DeleteCharacter(name);
     }
 }

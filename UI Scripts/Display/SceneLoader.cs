@@ -19,6 +19,11 @@ public class SceneLoader : MonoBehaviour
         CharName = name;
     }
 
+    public void GetChar(GameObject character)
+    {
+        Char = character;        
+    }
+
     private void Start()
     {
         DontDestroyOnLoad(this);        

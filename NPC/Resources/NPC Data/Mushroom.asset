@@ -15,20 +15,23 @@ MonoBehaviour:
   ID: 0
   Tier: 1
   MobLVL: 1
-  NPCType: 
+  NPCType: Plants
   ZoneAggro: 5
   NPCPrefab: {fileID: 2213239194912782239, guid: 11cbffc31f0fbef42a9f97719ceac93f, type: 3}
-  HP: 100
+  HP: 145
   MP: 0
   PhysicDamage: 25
   MagicDamage: 0
   AttackSpeed: 4
-  XP: 450
+  HitDistance: 1.2
+  SpawnChance: 45
+  XP: 140
   PatrolZone: 4
   PatrolTime: 5
   AgrroZone: 6
   PatrolSpeed: 2
   AggroSpeed: 4
+  ReturnSpeed: 6
   HaveCoins: 1
   MinCoins: 50
   MaxCoins: 150

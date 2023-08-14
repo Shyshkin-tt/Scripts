@@ -20,6 +20,7 @@ public class LocationManager : MonoBehaviour
 
 
     public Locations locationList;
+    public Locations towerLevelList;
 
     private void Awake()
     {
@@ -39,8 +40,6 @@ public class LocationManager : MonoBehaviour
     private void Start()
     {
         SpawnPlayer();
-        
-
     }
 
     private void SpawnPlayer()
@@ -49,12 +48,12 @@ public class LocationManager : MonoBehaviour
         _holder = FindObjectOfType<InventoryHolder>();
         charLoad.gameObject.transform.position = _loader.Position;
         SaveAndLoadManager.LoadInventory(_loader.CharName);
-        SaveAndLoadManager.LoadPlayerXP();
-        
+        SaveAndLoadManager.LoadPlayerXP(_loader.CharName);
+
         _holder._uiPlayer.SetActive(true);
-        
+
         _holder.SetNameAndLoc(_loader.CharName, _loader.Location, _loader.Position);
-        
+
         Camera cam = Instantiate(_playerCamera);
         var camLook = cam.GetComponentInChildren<CinemachineFreeLook>();
         camLook.Follow = charLoad.transform;
@@ -62,19 +61,32 @@ public class LocationManager : MonoBehaviour
 
         var action = charLoad.GetComponent<ActionController>();
         action._camera = cam;
-
     }
 
-    public void MovePlayer(string sceneName, string spawnPointName, InventoryHolder holder)
+    public void MovePlayer(string sceneName, string spawnPointName, InventoryHolder holder, string mapType)
     {
-        // Найти локацию по имени сцены
         LocationData targetLocation = null;
-        foreach (LocationData locationData in locationList.locations)
+        // Найти локацию по имени сцены
+        if (mapType == "World")
         {
-            if (locationData.locationName == sceneName)
+            foreach (LocationData locationData in locationList.locations)
             {
-                targetLocation = locationData;
-                break;
+                if (locationData.locationName == sceneName)
+                {
+                    targetLocation = locationData;
+                    break;
+                }
+            }
+        }
+        else if (mapType == "Tower")
+        {
+            foreach (LocationData locationData in towerLevelList.locations)
+            {
+                if (locationData.locationName == sceneName)
+                {
+                    targetLocation = locationData;
+                    break;
+                }
             }
         }
 
@@ -92,16 +104,13 @@ public class LocationManager : MonoBehaviour
                 }
             }
 
-           var sceneLoader = FindAnyObjectByType<SceneLoader>();
-
-            sceneLoader.Location = sceneName;
-            sceneLoader.Position = spawnPoint;
+            _loader.SetStats(sceneName, spawnPoint, holder.Inventory.Name);
 
             holder.Inventory.SetLocation(sceneName);
             holder.Inventory.SetCoord(spawnPoint);
 
-            SaveAndLoadManager.SaveInventory();
-            SaveAndLoadManager.SavePlayerXP();
+            SaveAndLoadManager.SaveInventory(_loader.CharName);
+            SaveAndLoadManager.SavePlayerXP(_loader.CharName);
             // Загрузить сцену
             SceneManager.LoadScene(sceneName);
         }

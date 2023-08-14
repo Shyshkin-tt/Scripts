@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 1
   Tier: 1
-  MobLVL: 1
-  NPCType: 
+  MobLVL: 2
+  NPCType: Plants
   ZoneAggro: 5
   NPCPrefab: {fileID: 7704867945639468025, guid: d4f57d9d3a40d7c44a4d12f286442a0a, type: 3}
   HP: 350
@@ -23,7 +23,9 @@ MonoBehaviour:
   PhysicDamage: 47
   MagicDamage: 0
   AttackSpeed: 4
-  XP: 630
+  HitDistance: 1.5
+  SpawnChance: 25
+  XP: 180
   PatrolZone: 5
   PatrolTime: 6
   AgrroZone: 5

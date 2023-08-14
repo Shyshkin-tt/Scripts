@@ -19,6 +19,9 @@ public class NPC : MonoBehaviour
     private Rigidbody _rb;
     private NPCMakeDamage _makeDamage;
 
+    [SerializeField] bool _spawned;
+    [SerializeField] bool _summoned;
+
     private float _timeAfterSpawn = 5f;
 
     //============= STATS ==============\\
@@ -61,7 +64,7 @@ public class NPC : MonoBehaviour
     [SerializeField] private bool _move = false;
     [SerializeField] private bool _patrol = false;
     [SerializeField] private bool _isAggro = false;
-    [SerializeField] private bool _returnToSpawn = false;
+    [SerializeField] private bool _returnToSpawn = true;
     [SerializeField] private bool _dead = false;    
 
 
@@ -96,14 +99,19 @@ public class NPC : MonoBehaviour
         _npcCreator.SetStats(_npcData);
 
         _hpSlider.maxValue = NPCCreator.NpcHP;
-        _hpSlider.value = NPCCreator.NpcHPValue;
-
-        StartCoroutine(AfterSpawn());
+        _hpSlider.value = NPCCreator.NpcHPValue;        
     }
 
     private void Start()
     {        
-        _spawnPoint = _spawn.transform.position;        
+        _spawnPoint = _spawn.transform.position;
+
+        if (_spawned) StartCoroutine(AfterSpawn());
+
+        if (_summoned)
+        {
+            // прописать логику сумона
+        }
     }
 
     private void Update()
@@ -131,6 +139,7 @@ public class NPC : MonoBehaviour
         }
         else if (_dead)
         {
+            _navMesh.isStopped = true;
             StartCoroutine(Die(3f));
             return;
         }
@@ -146,10 +155,11 @@ public class NPC : MonoBehaviour
     }
     private IEnumerator AfterSpawn()
     { 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(5f);
         if (_isAggro || _dead) yield break;
         _patrol = true;
         _navMesh.enabled = true;
+        _returnToSpawn = false;
 
         NPCCreator.SetCurrentSpeed(_npcData.PatrolSpeed);
 
@@ -167,7 +177,8 @@ public class NPC : MonoBehaviour
             {
                 SetRandomDestination();
                 StartCoroutine(Move());
-                yield return new WaitForSeconds(NPCCreator.PatrolTime);
+                var randomSpawn = UnityEngine.Random.Range(3, 6);
+                yield return new WaitForSeconds(NPCCreator.PatrolTime + randomSpawn);
             }
             yield return null;
         }
@@ -252,12 +263,12 @@ public class NPC : MonoBehaviour
                 yield break;
             }
             _canvas.gameObject.SetActive(true);
-            _navMesh.stoppingDistance = 1.2f;
+            _navMesh.stoppingDistance = _npcData.HitDistance;
             _targetPoint = _target.transform.position;
             StartCoroutine(FollowTarget());
             float currentTime = Time.time;
 
-            if (_isAggro && _navMesh.remainingDistance < 1.1f && !_navMesh.pathPending)
+            if (_isAggro && _navMesh.remainingDistance < _npcData.HitDistance && !_navMesh.pathPending)
             {
 
                 if (currentTime - _lastAttack >= _npcData.AttackSpeed)
@@ -273,7 +284,7 @@ public class NPC : MonoBehaviour
     }
     private IEnumerator FollowTarget()
     {
-        while (_toTarget > 1)
+        while (_toTarget > _npcData.HitDistance)
         {
             if (_dead) yield break;
 
@@ -289,13 +300,16 @@ public class NPC : MonoBehaviour
     {
         _animator.SetTrigger("Die");
 
+        var collider = GetComponent<CapsuleCollider>();
+        collider.enabled = false;
+
         if (!_giveXp)
         {
             NPCCreator.GiveXP(_target);
             _giveXp = true;
         }
 
-        _navMesh.enabled = false;
+        //_navMesh.enabled = false;
 
         if(!_coinsSpawned) SpawnCoins();
         if(!_trySpawnLootBag) SpawnLoot();
@@ -326,11 +340,11 @@ public class NPC : MonoBehaviour
 
         var chanseLoot = UnityEngine.Random.Range(1, 101);
 
-        if (chanseLoot < 35)
+        if (chanseLoot < 25)
         {
             LootBage bag = Instantiate(lootBage, transform.position, transform.rotation);            
         }
-        else Debug.Log("SRY no loot");
+        
         
         return true;
     }
@@ -357,7 +371,7 @@ public class NPC : MonoBehaviour
             _canvas.gameObject.SetActive(false);
             yield return new WaitForSeconds(3f);
             StopAllCoroutines();
-            NPCCreator.SetCurrentSpeed(_npcData.PatrolSpeed);
+            NPCCreator.SetCurrentSpeed(0f);
             StartCoroutine(AfterSpawn());
             _returnToSpawn = false;
             yield break;
@@ -385,6 +399,12 @@ public class NPC : MonoBehaviour
         Gizmos.DrawSphere(transform.position, NPCCreator.AggroZone);
     }
 
-
-
+    public void SetSpawnNPC()
+    {
+        _spawned = true;
+    }
+    public void SetSummonNPC()
+    {
+        _summoned = true;
+    }
 }

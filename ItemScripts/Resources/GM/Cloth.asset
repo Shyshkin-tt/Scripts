@@ -25,3 +25,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c98e845121419c841998a0b0e24c356f, type: 2}
   - {fileID: 11400000, guid: 52c2b22b609087f4b9023d5ec1355a75, type: 2}
   - {fileID: 11400000, guid: 65726649e91744b449e5c1c27d8c8a11, type: 2}
+  _rerourcesDatabase: []
+  _materialsDatabase: []

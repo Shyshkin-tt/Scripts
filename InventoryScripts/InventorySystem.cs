@@ -1,14 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class InventorySystem
 {
     [SerializeField] protected string _name;
     [SerializeField] protected string _location;
+    [SerializeField] protected bool _inCombat;
+    [SerializeField] protected float _timeExitCombat;
     [Header("____________________________________")]
     [SerializeField] protected int _coins;
     [Header("____________________________________")]
@@ -32,11 +34,14 @@ public class InventorySystem
     [SerializeField] protected SkinnedMeshRenderer _playerSkin;
     [SerializeField] protected InventoryHolder _holder;
 
-    private float _timeRec = 2f;
+    private float _timeRec = 5f;
     private float _lastRecHP = 0f;
     private float _lastRecMP = 0f;
+    private float _lastTimeHit = 30f;
+    
     public string Name => _name;
     public string Location => _location;
+    public bool InCombat => _inCombat;
     public int Coines => _coins;
     public int ItemPower => _ip;
     public int Health => _hp;
@@ -51,6 +56,7 @@ public class InventorySystem
     public int MPValue => _mpValue;
     public int HPRec => _hpRec;
     public int MPRec => _mpRec;
+    public float LastTimeHit => _timeExitCombat;
     public Vector3 SpawnCoord => _spawnCoords;
     public Vector3 CurrentCoordinats => _curentCoordinats;
     public SkinnedMeshRenderer Skin => _playerSkin;
@@ -69,12 +75,14 @@ public class InventorySystem
     public static UnityAction OnEquipSlotChanged;
     public UnityAction<InventorySlot> OnInventorySlotChanged;
 
-    public InventorySystem(int bagSlots, int equpslots, int beltsslots, string name, string location, int coins, int ip, int hp, int mp, int pd, int md, float @as, float ms,
+    public InventorySystem(int bagSlots, int equpslots, int beltsslots, string name, string location, bool inCobat, float exitCombat, int coins, int ip, int hp, int mp, int pd, int md, float @as, float ms,
         int pdef, int mdef, int hpValue, int mpValue, int hpRec, int mpRec, Vector3 lastCoordinats, Vector3 curentCoordinats, SkinnedMeshRenderer playerSkin, InventoryHolder holder)
     {
         
         _name = name;
         _location = location;
+        _inCombat = inCobat;
+        _timeExitCombat = exitCombat;
         _coins = coins;
         _ip = ip;
         _hp = hp;
@@ -263,8 +271,17 @@ public class InventorySystem
         {
             if (currentTime - _lastRecHP >= _timeRec)
             {
-                _hpValue += _hpRec;
-                _lastRecHP = currentTime;
+                int combatHpRec = _hpRec / 2;
+                if (_inCombat)
+                {
+                    _hpValue += combatHpRec;
+                    _lastRecHP = currentTime;
+                }
+                else
+                {
+                    _hpValue += _hpRec;
+                    _lastRecHP = currentTime;
+                }                
             }
         }
         else if (_hpValue >= _hp)
@@ -289,6 +306,20 @@ public class InventorySystem
     public void PlayerTakeDamage(int damage)
     {
         _hpValue -= damage;
+
+        _inCombat = true;
+
+        _timeExitCombat = _lastTimeHit;
+    }
+
+    public void ExitCombat()
+    {
+        _inCombat = false;        
+    }
+
+    public void TimeExitCombatLeft()
+    {
+        var exitCombat = _timeExitCombat -= Time.deltaTime;
     }
 
     public void ManaCoast(int mana)
@@ -296,34 +327,65 @@ public class InventorySystem
         _mpValue -= mana;
     }
 
-    public void StatAdd(InventoryItemData stats)
+    public void StatAdd(InventoryItemData stats, ItemXPSourse bonusClass)
+    {
+        _ip += stats.ItemPower + bonusClass.ItemPower;
+        _hp += stats.Health + bonusClass.Health;
+        _mp += stats.Mana + bonusClass.Mana;
+        _pd += stats.PhysicDamage + bonusClass.PDmg;
+        _md += stats.MagicDamage + bonusClass.MDmg;
+        _as -= stats.AttackSpeed + bonusClass.AttackSpeed;
+        _pdef += stats.PhysicDefence + bonusClass.PDef;
+        _mdef += stats.MagicDefence + bonusClass.MDef;
+        _hpRec += stats.HealthRecovery + bonusClass.HPRec;
+        _mpRec += stats.ManaRecovery + bonusClass.MPRec;
+        _hpValue += stats.Health + bonusClass.Health;
+        _mpValue += stats.Mana + bonusClass.Mana; ;
+
+    }
+    public void StatMinus(InventoryItemData stats, ItemXPSourse bonusClass)
+    {
+        _ip -= stats.ItemPower + bonusClass.ItemPower;
+        _hp -= stats.Health + bonusClass.Health;
+        _mp -= stats.Mana + bonusClass.Mana;
+        _pd -= stats.PhysicDamage + bonusClass.PDmg;
+        _md -= stats.MagicDamage + bonusClass.MDmg;
+        _as += stats.AttackSpeed + bonusClass.AttackSpeed;
+        _pdef -= stats.PhysicDefence + bonusClass.PDef;
+        _mdef -= stats.MagicDefence + bonusClass.MDef;
+        _hpRec -= stats.HealthRecovery + bonusClass.HPRec;
+        _mpRec -= stats.ManaRecovery + bonusClass.MPRec;
+        _hpValue -= stats.Health + bonusClass.Health;
+        _mpValue -= stats.Mana + bonusClass.Mana;
+    }
+    public void BonusStatAdd(ItemXPSourse stats)
     {
         _ip += stats.ItemPower;
         _hp += stats.Health;
         _mp += stats.Mana;
-        _pd += stats.PhysicDamage;
-        _md += stats.MagicDamage;
+        _pd += stats.PDmg;
+        _md += stats.MDmg;
         _as -= stats.AttackSpeed;
-        _pdef += stats.PhysicDamage;
-        _mdef += stats.MagicDamage;
-        _hpRec += stats.HealthRecovery;
-        _mpRec += stats.ManaRecovery;
+        _pdef += stats.PDef;
+        _mdef += stats.MDef;
+        _hpRec += stats.HPRec;
+        _mpRec += stats.MPRec;
         _hpValue += stats.Health;
         _mpValue += stats.Mana;
 
     }
-    public void StatMinus(InventoryItemData stats)
+    public void BonusStatMinus(ItemXPSourse stats)
     {
         _ip -= stats.ItemPower;
         _hp -= stats.Health;
         _mp -= stats.Mana;
-        _pd -= stats.PhysicDamage;
-        _md -= stats.MagicDamage;
+        _pd -= stats.PDmg;
+        _md -= stats.MDmg;
         _as += stats.AttackSpeed;
-        _pdef -= stats.PhysicDamage;
-        _mdef -= stats.MagicDamage;
-        _hpRec -= stats.HealthRecovery;
-        _mpRec -= stats.ManaRecovery;
+        _pdef -= stats.PDef;
+        _mdef -= stats.MDef;
+        _hpRec -= stats.HPRec;
+        _mpRec -= stats.MPRec;
         _hpValue -= stats.Health;
         _mpValue -= stats.Mana;
     }
@@ -333,8 +395,10 @@ public class InventorySystem
         _location = location;
         _spawnCoords = coords;
     }
-
-
+    public Vector3 GetSpawnCoordInHolder()
+    {
+        return _spawnCoords;
+    }
     public void SetName(string name)
     {
         _name = name;

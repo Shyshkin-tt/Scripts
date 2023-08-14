@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Plate Helmet
   m_EditorClassIdentifier: 
-  ID: 14
+  ID: 8
   Tier: 1
   DisplayName: Simple Plate Head
   ItemType: Head
-  ItemClass: Plate Head
+  ItemClass: Plate head
   SlotType: EquipSlot
   EquipSlotype: Head
   Description: 

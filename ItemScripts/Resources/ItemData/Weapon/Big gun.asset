@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Big gun
   m_EditorClassIdentifier: 
-  ID: 26
+  ID: 12
   Tier: 1
   DisplayName: Big gun
   ItemType: 2H_gun
@@ -28,7 +28,7 @@ MonoBehaviour:
   ItemPower: 5
   Health: 0
   Mana: 0
-  PhysicDamage: 40
+  PhysicDamage: 150
   MagicDamage: 0
   AttackSpeed: 0
   PhysicDefence: 0

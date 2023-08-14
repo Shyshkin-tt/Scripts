@@ -16,7 +16,7 @@ MonoBehaviour:
   Tier: 1
   DisplayName: Simple Cloth Shoes
   ItemType: Shoes
-  ItemClass: Cloth Shoes
+  ItemClass: Cloth shoes
   SlotType: EquipSlot
   EquipSlotype: Shoes
   Description: 

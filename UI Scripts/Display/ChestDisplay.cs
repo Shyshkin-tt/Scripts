@@ -18,9 +18,9 @@ public class ChestDisplay : InventoryController
     public void RefreshDynamicInventory(InventorySystem invToDisplay)
     {
         ClearSlots(); // Очистка слотов перед обновлением инвентаря
-        inventorySystem = invToDisplay;    // устанавливает систему инвентаря для отображения   
+        _inventorySystem = invToDisplay;    // устанавливает систему инвентаря для отображения   
         // подписывается на событие изменения слота инвентаря
-        if (inventorySystem != null) inventorySystem.OnInventorySlotChanged += UpdateSlot;
+        if (_inventorySystem != null) _inventorySystem.OnInventorySlotChanged += UpdateSlot;
         AssignSlot(invToDisplay); // вызывает метод назначения слота
     }
 
@@ -53,6 +53,6 @@ public class ChestDisplay : InventoryController
 
     private void OnDisable() // Отписка от события изменения слота инвентаря при выключении объекта
     {
-        if (inventorySystem != null) inventorySystem.OnInventorySlotChanged -= UpdateSlot;
+        if (_inventorySystem != null) _inventorySystem.OnInventorySlotChanged -= UpdateSlot;
     }
 }

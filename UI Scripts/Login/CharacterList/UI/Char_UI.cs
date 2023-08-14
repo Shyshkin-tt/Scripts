@@ -29,11 +29,15 @@ public class Char_UI : MonoBehaviour
     public void DeleteCharUI()
     {
         var index = transform.GetSiblingIndex();        
-        ParentDisplay.DeleteChar(index);
+        ParentDisplay.DeleteChar(index, _name.text);
         Destroy(this.transform.gameObject);
-        ParentDisplay.ActivCharScreenSet("");
-        var loader = FindObjectOfType<SceneLoader>();
-        Destroy(loader.transform.gameObject);
+
+        if (ParentDisplay._activCharacterPreview == _name.text)
+        {
+            ParentDisplay.ActivCharScreenSet("");
+            ParentDisplay._sceneLoader.CharName = "";
+        }
+        
     }
 
 

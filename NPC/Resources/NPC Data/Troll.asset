@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eea4bda4a1e21e4481147b14445ecab, type: 3}
+  m_Name: Troll
+  m_EditorClassIdentifier: 
+  ID: 8
+  Tier: 1
+  MobLVL: 4
+  NPCType: Orcoid
+  ZoneAggro: 5
+  NPCPrefab: {fileID: 437600692724341817, guid: 812b1f56fc98fd544ac4e97d418b67cf, type: 3}
+  HP: 390
+  MP: 0
+  PhysicDamage: 58
+  MagicDamage: 0
+  AttackSpeed: 5
+  HitDistance: 1.58
+  SpawnChance: 10
+  XP: 630
+  PatrolZone: 7
+  PatrolTime: 8
+  AgrroZone: 10
+  PatrolSpeed: 2
+  AggroSpeed: 4
+  ReturnSpeed: 6
+  HaveCoins: 1
+  MinCoins: 130
+  MaxCoins: 425
+  LootList: []

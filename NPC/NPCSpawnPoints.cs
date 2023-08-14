@@ -4,33 +4,45 @@ using UnityEngine;
 
 public class NPCSpawnPoints : MonoBehaviour
 {
-    public GameObject _spawnPointPrefab;
-    public Collider[] _ground;
+    [System.Serializable]
+    public class SpawnSettings
+    {
+        public List<NPCData> npcList;
+        public Collider groundCollider;
+        public int spawnCount;
+    }
+
+    public List<SpawnSettings> spawnSettings;
+    public GameObject spawnPointPrefab;
     public float spawnRadius;
-    public int spawnCount;
     public GameObject parentContainer;
 
     private void Start()
     {
-        for (int i = 0; i < spawnCount; i++)
+        foreach (var setting in spawnSettings)
         {
-            DoSpawn();
+            for (int i = 0; i < setting.spawnCount; i++)
+            {
+                DoSpawn(setting);
+            }
         }
     }
 
-    public void DoSpawn()
+    public void DoSpawn(SpawnSettings settings)
     {
-        if (_spawnPointPrefab != null && _ground != null && _ground.Length > 0)
+        if (spawnPointPrefab != null && settings.groundCollider != null)
         {
-            int randomIndex = Random.Range(0, _ground.Length);
-            Collider targetCollider = _ground[randomIndex];
+            Collider targetCollider = settings.groundCollider;
 
             Bounds colliderBounds = targetCollider.bounds;
 
             bool isSpawnPointValid = false;
             Vector3 spawnPosition = Vector3.zero;
 
-            while (!isSpawnPointValid)
+            int maxAttempts = 50;  // Максимальное количество попыток
+            int spawnAttempts = 0; // Счетчик попыток
+
+            while (!isSpawnPointValid && spawnAttempts < maxAttempts)
             {
                 // Получаем случайную позицию в пределах границ коллайдера
                 float randomX = Random.Range(colliderBounds.min.x, colliderBounds.max.x);
@@ -43,7 +55,7 @@ public class NPCSpawnPoints : MonoBehaviour
 
                 foreach (Collider collider in colliders)
                 {
-                    if (collider != targetCollider && collider is BoxCollider)
+                    if (collider != targetCollider && collider is Collider)
                     {
                         isPointOccupied = true;
                         break;
@@ -59,14 +71,28 @@ public class NPCSpawnPoints : MonoBehaviour
                         isSpawnPointValid = true;
                     }
                 }
+
+                spawnAttempts++;
             }
 
-            GameObject spawnedObject = Instantiate(_spawnPointPrefab, spawnPosition, Quaternion.identity);
-            spawnedObject.transform.parent = parentContainer.transform;
+            if (isSpawnPointValid)
+            {
+                GameObject spawnedObject = Instantiate(spawnPointPrefab, spawnPosition, Quaternion.identity);
+                spawnedObject.transform.parent = parentContainer.transform;
+                var spawn = spawnedObject.GetComponent<NPCSpawn>();
+
+                spawn.SetNPCList(settings.npcList);
+            }
+            else
+            {
+                Debug.LogWarning("Не удалось найти точку спавна на " + settings.groundCollider.name + " после " + maxAttempts + " попыток.");
+            }
+
         }
         else
         {
-            Debug.LogError("Необходимо настроить objectToSpawn и targetColliders!");
+            Debug.LogError("Необходимо настроить spawnPointPrefab и groundCollider!");
         }
     }
+
 }

@@ -58,44 +58,44 @@ public class InventoryDisplay : InventoryController
     {
         if (_playerInventoryHolder != null)
         {
-            inventorySystem = _playerInventoryHolder.Inventory;
-            inventorySystem.OnInventorySlotChanged += UpdateSlot;
+            _inventorySystem = _playerInventoryHolder.Inventory;
+            _inventorySystem.OnInventorySlotChanged += UpdateSlot;
 
         }
         else Debug.Log($"No inventory assigned to {this.gameObject}");
 
         // ќбновл€ем отображение инвентар€      
-        AssignSlot(inventorySystem);
+        AssignSlot(_inventorySystem);
     }
     public override void AssignSlot(InventorySystem invToDisplay)// ћетод дл€ присваивани€ €чеек инвентар€ отображению
     {
 
         slotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
 
-        if (_slotsBag.Length != inventorySystem.InventorySize) Debug.Log($"No inventory assigned to {this.gameObject}");
+        if (_slotsBag.Length != _inventorySystem.InventorySize) Debug.Log($"No inventory assigned to {this.gameObject}");
 
-        for (int i = 0; i < inventorySystem.InventorySize; i++)
+        for (int i = 0; i < _inventorySystem.InventorySize; i++)
         {
-            slotDictionary.Add(_slotsBag[i], inventorySystem.InventorySlots[i]);
-            _slotsBag[i].Init(inventorySystem.InventorySlots[i]);
+            slotDictionary.Add(_slotsBag[i], _inventorySystem.InventorySlots[i]);
+            _slotsBag[i].Init(_inventorySystem.InventorySlots[i]);
         }    
 
         equipSlotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
 
-        if (_equipmentSlots.Length != inventorySystem.EquipSlotsCount) Debug.Log($"No inventory assigned to {this.gameObject}");
+        if (_equipmentSlots.Length != _inventorySystem.EquipSlotsCount) Debug.Log($"No inventory assigned to {this.gameObject}");
 
-        for (int i = 0; i < inventorySystem.EquipSlotsCount; i++)
+        for (int i = 0; i < _inventorySystem.EquipSlotsCount; i++)
         {
-            slotDictionary.Add(_equipmentSlots[i], inventorySystem.EquipSlots[i]);
-            _equipmentSlots[i].Init(inventorySystem.EquipSlots[i]);
+            slotDictionary.Add(_equipmentSlots[i], _inventorySystem.EquipSlots[i]);
+            _equipmentSlots[i].Init(_inventorySystem.EquipSlots[i]);
         }
 
-        if (_slotsBelt.Length != inventorySystem.BeltSlotsCount) Debug.Log($"No inventory assigned to {this.gameObject}");
+        if (_slotsBelt.Length != _inventorySystem.BeltSlotsCount) Debug.Log($"No inventory assigned to {this.gameObject}");
 
-        for (int i = 0; i < inventorySystem.BeltSlotsCount; i++)
+        for (int i = 0; i < _inventorySystem.BeltSlotsCount; i++)
         {
-            slotDictionary.Add(_slotsBelt[i], inventorySystem.BeltSlots[i]);
-            _slotsBelt[i].Init(inventorySystem.BeltSlots[i]);
+            slotDictionary.Add(_slotsBelt[i], _inventorySystem.BeltSlots[i]);
+            _slotsBelt[i].Init(_inventorySystem.BeltSlots[i]);
         }
     }   
 

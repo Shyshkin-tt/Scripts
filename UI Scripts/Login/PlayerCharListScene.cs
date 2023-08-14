@@ -1,21 +1,21 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using PlayFab;
-using PlayFab.ClientModels;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using PlayFab.Internal;
+using UnityEngine.Analytics;
+using UnityEngine.WSA;
 using System;
-using System.Collections;
-
 
 [System.Serializable]
 public class PlayerCharListScene : MonoBehaviour
 {
     EventSystem _system;
-    
-    public GameObject _sceneLoader;
+
+    public GameObject _sceneLoaderPrefab;
+    public SceneLoader _sceneLoader;
+
     public Locations _loc;
 
     public  string _activCharacterPreview;
@@ -39,56 +39,111 @@ public class PlayerCharListScene : MonoBehaviour
     public TextMeshProUGUI _warningText;
 
     [Header("Player character list")]
-    [SerializeField] int _countChars;
-    public List<Character> _characterPreviewList;
+    int _countChars;
+    private List<Character> _characterPreviewList;
+
+    [SerializeField] protected PlayerCharListCreator _characterList;
+    public PlayerCharListCreator PlayerChar => _characterList;
 
     private void Awake()
     {        
         _system = EventSystem.current;
+        CreateSceneLoader();
         
         SaveLoadGameData.OnLoadCharListData += LoadCharList;
+        SaveLoadGameData.OnLoadData += SetSceneLoaderData;
 
         _characterPreviewList = new List<Character>();
-
+        _characterList = new PlayerCharListCreator(_characterPreviewList, _countChars);
     }
+
+    private void SetSceneLoaderData(SaveData data)
+    {
+        _sceneLoader.SetStats(data.playerInventory.InvSys.Location, data.playerInventory.InvSys.SpawnCoord, data.playerInventory.InvSys.Name);
+    }
+
     private void Start()
     {
         _activCharNick.text = "";
 
-        SaveAndLoadManager._listSaveData.playerListData = new PlayerListData(_characterPreviewList);
+        SaveAndLoadManager._listSaveData.playerListData = new PlayerListData(_characterList);
         SaveAndLoadManager.LoadCharList();
-        if (SaveAndLoadManager._listSaveData.playerListData.CharacterList == null) Debug.Log("no data in start");
-        StartCoroutine(ListCheck());
+
+        SetInSceneLoaderCurrentData();
     }
-    private void Update()
+    public void SetInSceneLoaderCurrentData()
     {
-             
+        foreach (var chars in _characterList.CharacterPreviewList)
+        {
+            if (_activCharacterPreview == chars.Name)
+            {
+                _sceneLoader.SetStats(chars.Location, chars.SpawnCoords, chars.Name);
+            }
+        }
     }
-    public void SetMale()
+
+    //======= ON START =======\\
+    private void CreateSceneLoader()
     {
-        _gender.text = "Male";
+        _sceneLoader = FindObjectOfType<SceneLoader>();
+
+        if (_sceneLoader == null)
+        {
+            GameObject loader = Instantiate(_sceneLoaderPrefab);
+            _sceneLoader = loader.GetComponent<SceneLoader>();
+        }
+        else
+        {
+
+        }
     }
-    public void SetFemale()
+    private void LoadCharList(ListSaveData data)
     {
-        _gender.text = "Female";
+        _characterList = data.playerListData.CharacterList;
+
+        foreach (var character in _characterList.CharacterPreviewList)
+        {
+            if (character.Name != null)
+            {
+                LoadCharacterList(character.Name, character.Gender, character.Location);
+            }
+        }
     }
+    public void LoadCharacterList(string name, string gender, string loc)
+    {
+        CreateUIList(name, gender, loc);
+
+        if (_previewCharacter != null)
+        {
+            var charPrefab = SelectGender(gender);
+            _sceneLoader.Char = charPrefab;
+            GameObject charPreview = Instantiate(charPrefab, _previewCharacter.transform);
+            
+            GoToLoaderAndOffFadeAndActionScripts(charPreview);
+
+            charPreview.name = name;
+
+            SaveAndLoadManager.LoadInventory(name);
+            SaveAndLoadManager.LoadPlayerXP(name);
+        }           
+    }  
+
+    //======= ON CREATE =======\\
     public void CheckCharacterCount()
     {
-        if (_countChars < 1)
+        if (PlayerChar.CountChars < 1)
             _charCreate.SetActive(true);
-        else if (_countChars == 1)
+        else if (PlayerChar.CountChars == 1)
         {
             _warningText.text = "Now you can create only one character";
             _warning.SetActive(true);
         }
     }
-    public void ActivCharScreenSet(string name)
-    {
-        _activCharacterPreview = name;
-        _activCharNick.text = name;
-    }
     public void CreateNewListInMenu()
     {
+        string start = "Start location";
+        var spawn = FindLocationCoordinates(start);
+
         if (_gender.text == "Female")
         {
             _warningText.text = "No female characters now";
@@ -97,11 +152,13 @@ public class PlayerCharListScene : MonoBehaviour
         }
         else
         {
-            _characterPreviewList.Add(new Character(_inputNameCharacter.text, _gender.text, "Start location"));
-            CreateUIList(_inputNameCharacter.text, _gender.text, "Start location");
-            CreateCharsGender(_inputNameCharacter.text, _gender.text, "Start location");
+            _characterList.AddCharToList(_inputNameCharacter.text, _gender.text, start, spawn);
+            CreateUIList(_inputNameCharacter.text, _gender.text, start);
+            CreateCharsGender(_inputNameCharacter.text, _gender.text, start);
+
+
             ClearAfterCreate();
-        }        
+        }
     }
     public void CreateUIList(string name, string gender, string loc)
     {
@@ -114,146 +171,114 @@ public class PlayerCharListScene : MonoBehaviour
         }
               
     }
-    private void ClearAfterCreate()
-    {
-        _inputNameCharacter.text = "Enter name";
-        _gender.text = "Choose gender";
-    }
     public void CreateCharsGender(string name, string gender, string loc)
     {
-        ActivCharScreenSet(name);        
+        ActivCharScreenSet(name);
 
-        if (gender == "Male")
-        {
-            GameObject charPreview = Instantiate(_malePrefab, _previewCharacter.transform);
-            charPreview.name = name;
-            var holder = _previewCharacter.GetComponentInChildren<InventoryHolder>();
-            SetNewChar(name, loc);
-            GoToLoaderAndOffFadeAndActionScripts(holder, _malePrefab);
-           
-        }
-        else if(gender == "Female")
-        {
-            GameObject charPreview = Instantiate(_femalePrefab, _previewCharacter.transform);
-            charPreview.name = name;
-            var holder = _previewCharacter.GetComponentInChildren<InventoryHolder>();
-            SetNewChar(name, loc);
-            GoToLoaderAndOffFadeAndActionScripts(holder, _femalePrefab);
-        }
-        
-        SaveAndLoadManager.SaveCharList();
-        
+        var charPrefab = SelectGender(gender);
+
+        GameObject charPreview = Instantiate(charPrefab, _previewCharacter.transform);
+        charPreview.name = name;
+
+        var holder = charPreview.GetComponent<InventoryHolder>();
+
+        GoToLoaderAndOffFadeAndActionScripts(charPreview);       
+        SetNewChar(holder, name, loc);
+        _sceneLoader.GetChar(charPrefab);
+
+        UpdateCharList();
+
+        //SaveChar(holder);
     }
-    private void LoadCharList(ListSaveData data)
+    private void SetNewChar(InventoryHolder holder, string name, string loc)
     {
-        _characterPreviewList = data.playerListData.CharacterList;
-
-        foreach (var character in _characterPreviewList)
-        {
-            if(character.Name != null)
-            {
-                LoadCharacterList(character.Name, character.Gender, character.Location);
-            }
-        }
-        
-    }
-    public void LoadCharacterList(string name, string gender, string loc)
-    {
-        CreateUIList(name, gender, loc);
-        if (_previewCharacter != null)
-        {
-            if (gender == "Male")
-            {
-                GameObject charPreview = Instantiate(_malePrefab, _previewCharacter.transform);
-                SaveAndLoadManager.LoadInventory(name);
-                SaveAndLoadManager.LoadPlayerXP();
-                charPreview.name = name;
-                var holder = _previewCharacter.GetComponentInChildren<InventoryHolder>();
-
-                GoToLoaderAndOffFadeAndActionScripts(holder, _malePrefab);
-            }
-            else if (gender == "Female")
-            {
-                GameObject charPreview = Instantiate(_femalePrefab, _previewCharacter.transform);
-                SaveAndLoadManager.LoadInventory(name);
-                SaveAndLoadManager.LoadPlayerXP();
-                charPreview.name = name;
-                var holder = _previewCharacter.GetComponentInChildren<InventoryHolder>();
-
-                GoToLoaderAndOffFadeAndActionScripts(holder, _femalePrefab);
-            }
-        }       
-    }
-
-    private void SetNewChar(string name, string loc)
-    {
-        var holder = _previewCharacter.GetComponentInChildren<InventoryHolder>();
-
         var spawn = FindLocationCoordinates(loc);
-        
         holder.Inventory.OnCreate(name, loc, spawn);
 
-        StartCoroutine(SaveInventoryAfterCreate());
+        _sceneLoader.SetStats(loc, spawn, name);
     }
-
-    private void GoToLoaderAndOffFadeAndActionScripts(InventoryHolder holder, GameObject charPrefab)
-    {
-        _countChars += 1;
-
-        var fade = holder.GetComponent<FadeToMe>();
-        fade.enabled = false;
-        var action = holder.GetComponent<ActionController>();
-        action.enabled = false;
-
-        StartCoroutine(AfterLoad(holder, charPrefab));
-    }
-
-    private IEnumerator AfterLoad(InventoryHolder holder, GameObject charPrefab)
-    {
-        var loaderInScene = FindObjectOfType<SceneLoader>();
-
-        if (loaderInScene == null)
-        {
-            GameObject loader = Instantiate(_sceneLoader);
-            var charPrefabInLoader = loader.GetComponent<SceneLoader>();
-
-            charPrefabInLoader.Char = charPrefab;
-
-            yield return new WaitForSeconds(0.5f);
-
-            charPrefabInLoader.SetStats(holder.Inventory.Location, holder.Inventory.SpawnCoord, holder.Inventory.Name);
-            holder.SetNameAndLoc(holder.Inventory.Name, holder.Inventory.Location, holder.Inventory.SpawnCoord);           
-        }
-        
-        yield break;
-    }
-
     private Vector3 FindLocationCoordinates(string loc)
     {
         foreach (var location in _loc.locations)
         {
             if (location.locationName == loc)
-            {                
-                return location.spawnPoints[0].spawnPoint.transform.position; // ������������, ��� ��������� ������� ����� ������ ���� ����� ������
+            {
+                return location.spawnPoints[0].spawnPoint.transform.position;
             }
         }
         return Vector3.zero;
     }
-
-    public void DeleteChar(int index)
+    public void ActivCharScreenSet(string name)
     {
-        Transform child = _previewCharacter.transform.GetChild(0);
-        DestroyImmediate(child.gameObject);
-        _characterPreviewList.RemoveAt(index);
-        _countChars -= 1;
-        Debug.Log("FindLocationCoordinates");
-        SaveAndLoadManager.SaveCharList();
+        _activCharacterPreview = name;
+        _activCharNick.text = name;
+    }
+    //========================\\
+
+    //======= HELPFULL METHODS =======\\
+    private GameObject SelectGender(string gender)
+    {
+        GameObject genderPrefab = null;
+
+        if (gender == "Male")
+        {
+            genderPrefab = _malePrefab;
+        }
+        else if (gender == "Female")
+        {
+            genderPrefab = _femalePrefab;
+        }
+        return genderPrefab;
+    }
+    private void GoToLoaderAndOffFadeAndActionScripts(GameObject character)
+    {
+        character.GetComponent<FadeToMe>().enabled = false;
+        character.GetComponent<ActionController>().enabled = false;
+        var holder = character.GetComponent<InventoryHolder>();
+
+        holder._uiPlayer.SetActive(false);
+
+        
+    }
+    public void SetMale()
+    {
+        _gender.text = "Male";
+    }
+    public void SetFemale()
+    {
+        _gender.text = "Female";
+    }
+    private void ClearAfterCreate()
+    {
+        _inputNameCharacter.text = "Enter name";
+        _gender.text = "Choose gender";
     }
     public void CleanWarningMessage()
     {
         _warningText.text = "";
-    }
+    }  
+    public void DeleteChar(int index, string name)
+    {
+        Transform child = _previewCharacter.transform.GetChild(0);
+        DestroyImmediate(child.gameObject);
+        PlayerChar.RemoveCharFromList(index);       
 
+        SaveAndLoadManager.DeleteChar(name);
+        UpdateCharList();
+    }
+    private void UpdateCharList()
+    {
+        SaveAndLoadManager._listSaveData.playerListData = new PlayerListData(_characterList);
+        SaveAndLoadManager.SaveCharList();
+    }
+    public void SaveChar()
+    {
+        var holder = _previewCharacter.GetComponentInChildren<InventoryHolder>();
+        holder.SaveFromHolder();
+    }
+    //========================\\
+
+    //======= BUTTONS =======\\
     public void Loggout()
     {
         var loader = FindObjectOfType<SceneLoader>();
@@ -261,52 +286,21 @@ public class PlayerCharListScene : MonoBehaviour
 
         SceneManager.LoadScene("Login");        
     }
-
     public void EntryInGame()
     {
         var scene = FindObjectOfType<SceneLoader>().Location;       
 
         SceneManager.LoadScene(scene);
     }
-
-    private IEnumerator SaveInventoryAfterCreate()
-    {
-        yield return new WaitForSeconds(.5f);
-        SaveAndLoadManager.SaveInventory();
-        SaveAndLoadManager.SavePlayerXP();
-        yield break;
-    }  
-    private IEnumerator ListCheck()
-    {
-        yield return new WaitForSeconds(.5f);
-
-        var loader = FindObjectOfType<SceneLoader>();
-
-        foreach (var chars in _characterPreviewList)
-        {
-            if (chars.Name == loader.CharName)
-            {
-                if (chars.Location != loader.Location)
-                {
-                    chars.UpdateCharLoc(loader.Location);
-                    var list = _previewPanel.gameObject.transform.Find(chars.Name);
-                    var change = list.GetComponent<Char_UI>();
-                    change._location.text = loader.Location;
-                    SaveAndLoadManager.SaveCharList();
-                }
-            }
-        }
-        
-        yield break;
-    }
+    //========================\\
 }
 
 [System.Serializable]
 public struct PlayerListData
 {
-    public List<Character> CharacterList;
+    public PlayerCharListCreator CharacterList;
 
-    public PlayerListData(List<Character> playerList )
+    public PlayerListData(PlayerCharListCreator playerList )
     {
         CharacterList = playerList;
     }

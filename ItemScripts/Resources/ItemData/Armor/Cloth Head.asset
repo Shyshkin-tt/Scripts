@@ -16,7 +16,7 @@ MonoBehaviour:
   Tier: 1
   DisplayName: Simple Cloth Head
   ItemType: Head
-  ItemClass: Cloth Head
+  ItemClass: Cloth head
   SlotType: EquipSlot
   EquipSlotype: Head
   Description: 

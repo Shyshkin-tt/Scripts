@@ -19,6 +19,8 @@ public class NPCData : ScriptableObject
     public int PhysicDamage;
     public int MagicDamage;
     public float AttackSpeed;
+    public float HitDistance;
+    public int SpawnChance;
 
     [Header("Give to player")]
     public int XP;

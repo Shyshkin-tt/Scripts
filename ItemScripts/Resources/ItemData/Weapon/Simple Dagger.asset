@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Simple Dagger
   m_EditorClassIdentifier: 
-  ID: 9
+  ID: 22
   Tier: 1
   DisplayName: Simple Dagger
   ItemType: 1H_Weapon
@@ -30,7 +30,7 @@ MonoBehaviour:
   Mana: 0
   PhysicDamage: 17
   MagicDamage: 0
-  AttackSpeed: 3
+  AttackSpeed: 0
   PhysicDefence: 0
   MagicDefence: 0
   HealthRecovery: 0

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Tehnical Armor
   m_EditorClassIdentifier: 
-  ID: 23
+  ID: 9
   Tier: 1
   DisplayName: Tehnical Armor
   ItemType: Armor
-  ItemClass: Plate Armor
+  ItemClass: Plate armor
   SlotType: EquipSlot
   EquipSlotype: Armor
   Description: 

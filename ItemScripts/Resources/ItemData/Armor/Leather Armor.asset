@@ -16,7 +16,7 @@ MonoBehaviour:
   Tier: 1
   DisplayName: Simple Leather Armor
   ItemType: Armor
-  ItemClass: Leather Armor
+  ItemClass: Leather armor
   SlotType: EquipSlot
   EquipSlotype: Armor
   Description: 

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eea4bda4a1e21e4481147b14445ecab, type: 3}
+  m_Name: OrcPigStrongWoodShield
+  m_EditorClassIdentifier: 
+  ID: 6
+  Tier: 1
+  MobLVL: 3
+  NPCType: Orcoid
+  ZoneAggro: 5
+  NPCPrefab: {fileID: 1968692655685442566, guid: 9cafebdd40877b04da6a541cb597e219, type: 3}
+  HP: 315
+  MP: 0
+  PhysicDamage: 35
+  MagicDamage: 0
+  AttackSpeed: 5
+  HitDistance: 1.68
+  SpawnChance: 15
+  XP: 305
+  PatrolZone: 5
+  PatrolTime: 6
+  AgrroZone: 6
+  PatrolSpeed: 2
+  AggroSpeed: 4
+  ReturnSpeed: 6
+  HaveCoins: 1
+  MinCoins: 60
+  MaxCoins: 140
+  LootList: []

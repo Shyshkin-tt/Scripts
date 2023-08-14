@@ -30,7 +30,7 @@ MonoBehaviour:
   Mana: 0
   PhysicDamage: 33
   MagicDamage: 0
-  AttackSpeed: 2
+  AttackSpeed: 0
   PhysicDefence: 0
   MagicDefence: 0
   HealthRecovery: 0

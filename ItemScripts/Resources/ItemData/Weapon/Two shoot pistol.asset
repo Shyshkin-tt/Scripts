@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
-  m_Name: Tehnical Dagger
+  m_Name: Two shoot pistol
   m_EditorClassIdentifier: 
-  ID: 22
+  ID: 28
   Tier: 1
-  DisplayName: Tehnical Dagger
-  ItemType: 1H_Weapon
-  ItemClass: Dagger
+  DisplayName: Two shoot pistol
+  ItemType: 1H_gun
+  ItemClass: Gunshoot
   SlotType: EquipSlot
   EquipSlotype: RHand
   Description: 
-  Icon: {fileID: 21300000, guid: 795ac337ad3ebc4438ab09b070ec10ac, type: 3}
+  Icon: {fileID: 21300000, guid: 0bac9200373560b4fa500276fe4ce8d7, type: 3}
   MaxStackSize: 1
-  GoldValue: 130
+  GoldValue: 260
   Chance: 60
-  ItemPrefab: {fileID: 4028202807063415932, guid: 242cc4b87616db44da93671c1c132cba, type: 3}
+  ItemPrefab: {fileID: 6709705122564092882, guid: a9ad581b240053a49a3dfc40d5d8575a, type: 3}
   ItemPower: 5
-  Health: 5
-  Mana: 3
-  PhysicDamage: 14
+  Health: 0
+  Mana: 0
+  PhysicDamage: 25
   MagicDamage: 0
-  AttackSpeed: 3
+  AttackSpeed: 0
   PhysicDefence: 0
   MagicDefence: 0
   HealthRecovery: 0

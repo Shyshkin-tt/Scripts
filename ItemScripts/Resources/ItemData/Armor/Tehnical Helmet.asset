@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Tehnical Helmet
   m_EditorClassIdentifier: 
-  ID: 25
+  ID: 11
   Tier: 1
   DisplayName: Tehnical Helmet
   ItemType: Head
-  ItemClass: Plate Head
+  ItemClass: Plate head
   SlotType: EquipSlot
   EquipSlotype: Head
   Description: 

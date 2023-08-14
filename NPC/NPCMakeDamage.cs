@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class NPCMakeDamage : MonoBehaviour
 {
-    private SphereCollider _hit;
+    private Collider _hit;
     public bool _canHit = false;
 
     private void Awake()
     {
-        _hit = GetComponent<SphereCollider>();
+        _hit = GetComponent<Collider>();
         _hit.isTrigger = true;
         
     }

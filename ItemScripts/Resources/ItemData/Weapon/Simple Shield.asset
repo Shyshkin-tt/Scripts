@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8e63c646a14f91499a99a7f979b947f, type: 3}
   m_Name: Simple Shield
   m_EditorClassIdentifier: 
-  ID: 11
+  ID: 23
   Tier: 1
   DisplayName: Simple Shield
   ItemType: OffHeand

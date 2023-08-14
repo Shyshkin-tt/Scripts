@@ -16,7 +16,7 @@ MonoBehaviour:
   Tier: 1
   DisplayName: Simple Cloth Armor
   ItemType: Armor
-  ItemClass: Cloth Armor
+  ItemClass: Cloth armor
   SlotType: EquipSlot
   EquipSlotype: Armor
   Description: 
