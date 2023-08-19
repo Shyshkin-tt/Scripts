@@ -87,6 +87,7 @@ public class NPCSpawnPoints : MonoBehaviour
             {
                 Debug.LogWarning("Ќе удалось найти точку спавна на " + settings.groundCollider.name + " после " + maxAttempts + " попыток.");
             }
+
         }
         else
         {
