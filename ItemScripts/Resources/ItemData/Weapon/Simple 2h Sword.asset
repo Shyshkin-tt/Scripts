@@ -35,3 +35,6 @@ MonoBehaviour:
   MagicDefence: 0
   HealthRecovery: 0
   ManaRecovery: 0
+  SpellOne: {fileID: 11400000, guid: d2d3db5bba0e73f4fb50ad939ca72ac0, type: 2}
+  SpellTwo: {fileID: 0}
+  SpellThree: {fileID: 0}

@@ -6,37 +6,59 @@ using UnityEngine;
 
 public class SaveAndLoadManager : MonoBehaviour
 {
-    public static SaveData _saveData;
-    public static ListSaveData _listSaveData;
+    public static CharacteristicsSave _characteristicsData;
+    public static InventorySave _inventoryData;
+    public static ListSave _listSaveData;
     public static PlayerExperienceSave _playerXPData;
 
     private void Awake()
     {
-        _saveData = new SaveData();
+        _characteristicsData = new CharacteristicsSave();
+        _inventoryData = new InventorySave();
         _playerXPData = new PlayerExperienceSave();
-        _listSaveData= new ListSaveData();
+        _listSaveData= new ListSave();
 
-        SaveLoadGameData.OnLoadData += LoadData;
+        SaveLoadGameData.OnLoadCharacteristics += LoadCharacteristics;
+        SaveLoadGameData.OnLoadInventory += LoadInventory;
         SaveLoadGameData.OnLoadPayerXP += LoadPlayerXpData;
         SaveLoadGameData.OnLoadCharListData += LoadListData;
     }
-    public static void LoadData(SaveData saveData)
+
+    private void LoadCharacteristics(CharacteristicsSave saveCharacteristics)
+    {
+        _characteristicsData = saveCharacteristics;
+    }
+    public static void LoadInventory(InventorySave saveInventory)
     {        
-        _saveData = saveData;
+        _inventoryData = saveInventory;
     }
     private void LoadPlayerXpData(PlayerExperienceSave playerXP)
     {
         _playerXPData = playerXP;        
     }
+    private void LoadListData(ListSave listData)
+    {
+        _listSaveData = listData;
+    }
     public static void SaveInventory(string name)
     {
-        var saveData = _saveData;
+        var saveInventory = _inventoryData;
        
-        SaveLoadGameData.SaveCharacterInventory(saveData, name);
+        SaveLoadGameData.SaveCharacterInventory(saveInventory, name);
+    }
+    public static void SaveCharacteristics(string name)
+    {
+        var saveCharacteristics = _characteristicsData;
+
+        SaveLoadGameData.SaveCharacterCharacteristics(saveCharacteristics, name);
     }
     public static void LoadInventory(string name)
     {        
         SaveLoadGameData.LoadCharacterInventory(name);
+    }
+    public static void LoadCharacteristics(string name)
+    {
+        SaveLoadGameData.LoadCharacterCharacteristics(name);
     }
     public static void SavePlayerXP(string name)
     {
@@ -49,10 +71,7 @@ public class SaveAndLoadManager : MonoBehaviour
         SaveLoadGameData.LoadCharacterXP(name);        
     }
 
-    private void LoadListData(ListSaveData listData)
-    {
-        _listSaveData = listData;
-    }
+   
     public static void SaveCharList()
     {
         var saveData = _listSaveData;

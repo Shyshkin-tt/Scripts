@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using TMPro;
-
+using UnityEngine.Events;
 
 [RequireComponent(typeof(CharacterController))]
 public class MouseItemData : MonoBehaviour
@@ -49,7 +49,7 @@ public class MouseItemData : MonoBehaviour
             transform.position = Mouse.current.position.ReadValue(); // Двигаем объект за мышкой
             // Если нажатие на левую кнопку мыши и курсор не находится над UI объектом, то слот инвентаря очищается
             if (_inputs.Player.LMB.ReadValue<float>() > 0 && !IsPointerOverUIObject())
-            {               
+            {
                 ClearSlot();
                 // Дописать окно подтверждения удаления предмета если он выкидывается
             }
@@ -72,4 +72,5 @@ public class MouseItemData : MonoBehaviour
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);        
         return results.Count > 0;
     }
+
 }

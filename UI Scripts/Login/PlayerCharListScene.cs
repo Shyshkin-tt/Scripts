@@ -51,15 +51,15 @@ public class PlayerCharListScene : MonoBehaviour
         CreateSceneLoader();
         
         SaveLoadGameData.OnLoadCharListData += LoadCharList;
-        SaveLoadGameData.OnLoadData += SetSceneLoaderData;
+        SaveLoadGameData.OnLoadCharacteristics += SetSceneLoaderData;
 
         _characterPreviewList = new List<Character>();
         _characterList = new PlayerCharListCreator(_characterPreviewList, _countChars);
     }
 
-    private void SetSceneLoaderData(SaveData data)
+    private void SetSceneLoaderData(CharacteristicsSave data)
     {
-        _sceneLoader.SetStats(data.playerInventory.InvSys.Location, data.playerInventory.InvSys.SpawnCoord, data.playerInventory.InvSys.Name);
+        _sceneLoader.SetStats(data.playerCharacteristics.Characteristics.Location, data.playerCharacteristics.Characteristics.SpawnCoord, data.playerCharacteristics.Characteristics.Name);
     }
 
     private void Start()
@@ -97,7 +97,7 @@ public class PlayerCharListScene : MonoBehaviour
 
         }
     }
-    private void LoadCharList(ListSaveData data)
+    private void LoadCharList(ListSave data)
     {
         _characterList = data.playerListData.CharacterList;
 
@@ -123,6 +123,7 @@ public class PlayerCharListScene : MonoBehaviour
 
             charPreview.name = name;
 
+            SaveAndLoadManager.LoadCharacteristics(name);
             SaveAndLoadManager.LoadInventory(name);
             SaveAndLoadManager.LoadPlayerXP(name);
         }           
@@ -193,7 +194,7 @@ public class PlayerCharListScene : MonoBehaviour
     private void SetNewChar(InventoryHolder holder, string name, string loc)
     {
         var spawn = FindLocationCoordinates(loc);
-        holder.Inventory.OnCreate(name, loc, spawn);
+        holder.Characteristics.OnCreate(name, loc, spawn);
 
         _sceneLoader.SetStats(loc, spawn, name);
     }
@@ -236,7 +237,7 @@ public class PlayerCharListScene : MonoBehaviour
         character.GetComponent<ActionController>().enabled = false;
         var holder = character.GetComponent<InventoryHolder>();
 
-        holder._uiPlayer.SetActive(false);
+        holder.UIController.gameObject.SetActive(false);
 
         
     }

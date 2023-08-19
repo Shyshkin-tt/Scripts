@@ -28,14 +28,14 @@ public class ChestDisplay : InventoryController
     {
         ClearSlots();
 
-        slotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
+        inventorySlotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
 
         if (invToDisplay == null) return;
 
         for (int i = 0; i < invToDisplay.InventorySize; i++)
         {            
             var uiSlot = Instantiate(_slotPrefab, _itemList.transform);// Создает экземпляр слота
-            slotDictionary.Add(uiSlot, invToDisplay.InventorySlots[i]); // Добавляет слот в словарь
+            inventorySlotDictionary.Add(uiSlot, invToDisplay.InventorySlots[i]); // Добавляет слот в словарь
             uiSlot.Init(invToDisplay.InventorySlots[i]); // Инициализирует слот
             uiSlot.UpdateUISlot(); // Обновляет UI слот
         }
@@ -48,7 +48,7 @@ public class ChestDisplay : InventoryController
             Destroy(item.gameObject);
         }
 
-        if (slotDictionary != null) slotDictionary.Clear();
+        if (inventorySlotDictionary != null) inventorySlotDictionary.Clear();
     }
 
     private void OnDisable() // Отписка от события изменения слота инвентаря при выключении объекта

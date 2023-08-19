@@ -9,18 +9,16 @@ public class InventoryHolder : MonoBehaviour
 {
     public Database _database;
     public SkinnedMeshRenderer playerSkin;
-    public GameObject _uiPlayer;
     public InventoryHolder _holder;
-
+    [SerializeField] private UIController _uiPlayer;
+    public UIController UIController => _uiPlayer;
 
     [SerializeField] private List<string> _classList = new List<string>(5); // Инициализируйте с нужным размером
     [SerializeField] private List<string> _itemList = new List<string>(5); // Инициализируйте с нужным размером
+
     private string _name = "";
     private string _location = "";
     private bool _inCombat;
-
-
-    private int _coins = 0;
     
     private int _ip = 0;
     private int _hp = 250;
@@ -41,7 +39,19 @@ public class InventoryHolder : MonoBehaviour
 
     private float _timeExitCombat;
 
-    [Header("____________________________________")]
+    [Header("_____________SPELLS_________________")]
+    private SpellData _spellQ;
+    private float _cooldownQ;
+    private SpellData _spellW;
+    private float _cooldownW;
+    private SpellData _spellE;
+    private float _cooldownE;
+    private SpellData _spellR;
+    private float _cooldownR;
+
+    [Header("____________INVENTORY_______________")]
+    private int _coins = 0;
+
     public int _inventorySize;
     public int _equipSlots;
     public int _bagSlots;
@@ -53,11 +63,18 @@ public class InventoryHolder : MonoBehaviour
     private int _totalXp;
     private List<ItemsXP> _itemClassList;
     private List<ItemsXP> _itemNameList;
+    [Header("____________________________________")]
+    [SerializeField] protected CharacterCharacteristics _characteristics;
+    public CharacterCharacteristics Characteristics => _characteristics;
+    public Vector3 CurrentCoordinats => _curentCoordinats;
 
     [Header("____________________________________")]
     [SerializeField] protected InventorySystem _inventory;
-    public InventorySystem Inventory => _inventory;   
-    public Vector3 CurrentCoordinats => _curentCoordinats;
+    public InventorySystem Inventory => _inventory;
+
+    [Header("____________________________________")]
+    [SerializeField] protected SpellSystem _spellSystem;
+    public SpellSystem Spells => _spellSystem;
 
     [Header("____________________________________")]
     [SerializeField] protected ExperienceSystem _experience;
@@ -68,36 +85,49 @@ public class InventoryHolder : MonoBehaviour
 
     protected virtual void Awake()
     {
-        SaveLoadGameData.OnLoadData += LoadInventory;
+        SaveLoadGameData.OnLoadCharacteristics += LoadCharacteristics;
+        SaveLoadGameData.OnLoadInventory += LoadInventory;
         SaveLoadGameData.OnLoadPayerXP += LoadPlayerXP;
+
         InventorySystem.OnEquipSlotChanged += GetCurrentItems;
         ExperienceSystem.LvlUp += ChangeBonusStats;
 
-
         playerSkin = GetComponentInChildren<SkinnedMeshRenderer>();
+        _uiPlayer = FindObjectOfType<UIController>();
 
-        _inventory = new InventorySystem(_inventorySize, _equipSlots, _bagSlots, _name, _location, _inCombat, _timeExitCombat, _coins, _ip, _hp, _mp, _pd, _md, _as, _ms,
+        _characteristics = new CharacterCharacteristics(_name, _location, _inCombat, _timeExitCombat, _ip, _hp, _mp, _pd, _md, _as, _ms,
         _pdef, _mdef, _hpValue, _mpValue, _hpRec, _mpRec, _spawnCoords, _curentCoordinats, playerSkin, _holder);
 
-        _experience = new ExperienceSystem(_totalXp, _itemClassList, _database);        
+        _inventory = new InventorySystem(_inventorySize, _equipSlots, _bagSlots,  _coins);
 
-        _inventory.SetValue();
+        _spellSystem = new SpellSystem(_spellQ, _cooldownQ, _spellW, _cooldownW, _spellE, _cooldownE);
+
+        _experience = new ExperienceSystem(_totalXp, _itemClassList, _database);
+
+
+        _characteristics.SetValue();
 
         if (Inventory.EquipSlots[0].NameSlot == null)
             SetNewSlot();
     }
 
+    private void LoadCharacteristics(CharacteristicsSave data)
+    {
+        _characteristics = data.playerCharacteristics.Characteristics;
+        Characteristics.SetSkinAndHolder(playerSkin, _holder);
+    }
+
     private void ChangeBonusStats(ItemsXP item)
     {
         var oldStatsClass = Experience.GetBonusStatsClass(item.NameClass);
-        Inventory.BonusStatMinus(oldStatsClass);
+        Characteristics.BonusStatMinus(oldStatsClass);
         //var oldStatsName = Experience.GetBonusStatsName(item.ID);
         //Inventory.BonusStatMinus(oldStatsName);
 
         item.UpdateItemBonusStat();
 
         var newStatsClass = Experience.GetBonusStatsClass(item.NameClass);
-        Inventory.BonusStatAdd(newStatsClass);
+        Characteristics.BonusStatAdd(newStatsClass);
         //var newStatsName = Experience.GetBonusStatsName(item.ID);
         //Inventory.BonusStatAdd(newStatsName);
     }
@@ -118,7 +148,8 @@ public class InventoryHolder : MonoBehaviour
 
     private void Start()
     {
-        SaveAndLoadManager._saveData.playerInventory = new InventorySaveData(_inventory);
+        SaveAndLoadManager._characteristicsData.playerCharacteristics = new CharacteristicsSaveData(_characteristics);
+        SaveAndLoadManager._inventoryData.playerInventory = new InventorySaveData(_inventory);
         SaveAndLoadManager._playerXPData.playerExperience = new ExperienceSaveData(_experience);
 
         UIController.LoadXpForItems?.Invoke();
@@ -126,11 +157,11 @@ public class InventoryHolder : MonoBehaviour
 
     private void Update()
     {
-        _inventory.GetCurentCoords(_holder);
-        _curentCoordinats = _inventory.CurrentCoordinats;
+        _characteristics.GetCurentCoords(_holder);
+        _curentCoordinats = _characteristics.CurrentCoordinats;
 
-        if (Inventory.InCombat) Inventory.TimeExitCombatLeft();
-        if (Inventory.LastTimeHit <= 0) Inventory.ExitCombat();
+        if (Characteristics.InCombat) Characteristics.TimeExitCombatLeft();
+        if (Characteristics.LastTimeHit <= 0) Characteristics.ExitCombat();
     }
 
     public void SetNameAndLoc(string name, string loc, Vector3 spawn)
@@ -139,11 +170,11 @@ public class InventoryHolder : MonoBehaviour
         _location = loc;
         _spawnCoords = spawn;        
     }
-    protected virtual void LoadInventory(SaveData data)
+    protected virtual void LoadInventory(InventorySave data)
     {        
         _inventory = data.playerInventory.InvSys;
 
-        _inventory.SetSkinAndHolder(playerSkin, _holder);
+        //
 
         if (_inventory.EquipSlots[0].OnEquip == null)
             LoadSlots();        
@@ -166,8 +197,7 @@ public class InventoryHolder : MonoBehaviour
 
         foreach (InventoryItemData itemData in data)
         {
-            bool itemClassFound = false;
-            //bool itemNameFound = false;
+            bool itemClassFound = false;           
 
             foreach (var itemClass in Experience.ItemListClass)
             {
@@ -245,11 +275,13 @@ public class InventoryHolder : MonoBehaviour
 
     public void SaveFromHolder()
     {
-        SaveAndLoadManager.SaveInventory(Inventory.Name);
-        SaveAndLoadManager.SavePlayerXP(Inventory.Name);        
+        SaveAndLoadManager.SaveCharacteristics(Characteristics.Name);
+        SaveAndLoadManager.SaveInventory(Characteristics.Name);
+        SaveAndLoadManager.SavePlayerXP(Characteristics.Name);        
     }
     public void LoadFromHolder()
     {
+        SaveAndLoadManager.LoadCharacteristics(_name);
         SaveAndLoadManager.LoadInventory(_name);
         SaveAndLoadManager.LoadPlayerXP(_name);
     }
@@ -283,7 +315,18 @@ public class InventoryHolder : MonoBehaviour
     }
     public void ExitCombat()
     {
-        Inventory.ExitCombat();
+        Characteristics.ExitCombat();
+    }
+}
+
+[System.Serializable]
+public struct CharacteristicsSaveData
+{
+    public CharacterCharacteristics Characteristics;
+
+    public CharacteristicsSaveData(CharacterCharacteristics characteristics)
+    {
+        Characteristics = characteristics;
     }
 }
 
@@ -297,6 +340,7 @@ public struct InventorySaveData
         InvSys = invSys;
     }
 }
+
 [System.Serializable]
 public struct ExperienceSaveData
 {

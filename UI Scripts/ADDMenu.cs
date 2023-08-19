@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class ADDMenu : MonoBehaviour
 {
     public Database _data;
-    public InventoryHolder _inventory;
+    public UIController _uiController;
 
     private TMPro.TMP_Dropdown _menu;    
     private List<InventoryItemData> _items;
@@ -36,7 +36,7 @@ public class ADDMenu : MonoBehaviour
 
     private void AddItem(int index)
     {
-        var inventory = _inventory;
+        var inventory = _uiController._holder;
         if (!inventory) return;
        
         if (index >= 0 && index < _items.Count)

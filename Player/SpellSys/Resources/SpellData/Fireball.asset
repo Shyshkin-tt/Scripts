@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85cd1a8df4e32164f9b303c0a49014a5, type: 3}
+  m_Name: Fireball
+  m_EditorClassIdentifier: 
+  ID: 0
+  SpellName: Fireball
+  Icon: {fileID: 21300000, guid: e977c1562987f7e41b442f92c93f4234, type: 3}
+  Description: 
+  RequiredLevel: 0
+  SpellPrefab: {fileID: 4724617073012793687, guid: 70c5a9c250c4f2b42bf6c3adf7ce8635, type: 3}
+  VisualFX: {fileID: 0}
+  SoundFX: {fileID: 0}
+  TypeDamage: 1
+  SpellSpawn: 3
+  TypeSpawn: 0
+  SpellType: 0
+  TargetType: 0
+  TypeCast: 0
+  TypeResource: 0
+  _destroyOnTriggerEnter: 1
+  _dealDamageBeforeDestroy: 0
+  _moveForward: 1
+  _moveToPoint: 0
+  _delayDestroy: 0
+  Damage: 50
+  ManaCost: 15
+  CastingTime: 1
+  Cooldown: 1
+  LifeTime: 10
+  DistanceRange: 10
+  Speed: 6
+  SpellRepeatCount: 1

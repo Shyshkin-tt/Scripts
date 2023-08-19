@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Inventory System/Inventory Item")]
+[CreateAssetMenu(fileName = "New Item", menuName = "Inventory System/Inventory Item")]
 public class InventoryItemData : ScriptableObject
 {
     public int ID = -1;
@@ -33,4 +33,9 @@ public class InventoryItemData : ScriptableObject
     public int MagicDefence;
     public int HealthRecovery;
     public int ManaRecovery;
+
+    [Header("Spells")]
+    public SpellData SpellOne;
+    public SpellData SpellTwo;
+    public SpellData SpellThree;
 }

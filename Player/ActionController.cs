@@ -15,7 +15,16 @@ public class ActionController : NetworkBehaviour
     [SerializeField] private Animation _playerAnim;
     [SerializeField] private MakeDamage _hitBox;
 
-    public GameObject _bulletSpawn;
+    public PlayerController Controlls => _input;
+
+    [SerializeField] private GameObject _upperForwardSpawnPoint;
+    [SerializeField] private GameObject _upperCenterSpawnPoint;
+    [SerializeField] private GameObject _groundForwardSpawnPoint;
+    [SerializeField] private GameObject _groundCenterSpawnPoint;
+    public GameObject UpperForwardSpawmPoint => _upperForwardSpawnPoint;
+    public GameObject UpperCenterSpawmPoint => _upperCenterSpawnPoint;
+    public GameObject GroundForwardSpawmPoint => _groundForwardSpawnPoint;
+    public GameObject GroundCenterSpawmPoint => _groundCenterSpawnPoint;
 
     public Camera _camera;
     public Vector3 _targetPoint;
@@ -59,7 +68,7 @@ public class ActionController : NetworkBehaviour
 
     private void Update()
     {
-        _movespeed = _inv.Inventory.MoveSpeed;
+        _movespeed = _inv.Characteristics.MoveSpeed;
         _hit = _anim.GetBool("Hit");
 
         if (_input.Player.Stop.ReadValue<float>() != 0)
@@ -128,6 +137,7 @@ public class ActionController : NetworkBehaviour
         while (Vector3.Distance(transform.position, _targetPoint) > 0.3f)
         {
             _move = true;
+            SpellCasting.BreakCastTrigger?.Invoke();
             Vector3 direction = target - transform.position;
             direction.y = 0f;
             _char.Move(direction.normalized * _movespeed * Time.deltaTime);
@@ -181,7 +191,7 @@ public class ActionController : NetworkBehaviour
             Rotation();
             StopMove();
             _anim.SetTrigger("Attack");
-
+            SpellCasting.BreakCastTrigger?.Invoke();
             var gunType = _playerAnim.ItemType;
 
             if (gunType == "1H_gun" || gunType == "2H_gun")

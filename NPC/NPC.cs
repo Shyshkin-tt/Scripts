@@ -18,7 +18,7 @@ public class NPC : MonoBehaviour
     private Animator _animator;
     private Rigidbody _rb;
     private NPCMakeDamage _makeDamage;
-
+   
     [SerializeField] bool _spawned;
     [SerializeField] bool _summoned;
 
@@ -70,7 +70,7 @@ public class NPC : MonoBehaviour
 
     private float _lastAttack = 0f;
 
-    private InventoryHolder _target;
+    [SerializeField] private InventoryHolder _target;
     [SerializeField] private float _toTarget;
     [SerializeField] private Vector3 _targetPoint;
 
@@ -154,7 +154,9 @@ public class NPC : MonoBehaviour
 
     }
     private IEnumerator AfterSpawn()
-    { 
+    {
+
+
         yield return new WaitForSeconds(5f);
         if (_isAggro || _dead) yield break;
         _patrol = true;
@@ -240,7 +242,7 @@ public class NPC : MonoBehaviour
                     
                     _patrol = false;
                     _isAggro = true;
-                    SetTarget(collider.gameObject);                    
+                    SetTarget(collider.gameObject);
                     _targetPoint = _target.transform.position;
                     _navMesh.stoppingDistance = 1.2f;
                     _toTarget = Vector3.Distance(_target.transform.position, transform.position);
@@ -299,6 +301,8 @@ public class NPC : MonoBehaviour
     private IEnumerator Die(float delay)
     {
         _animator.SetTrigger("Die");
+
+        _makeDamage.gameObject.SetActive(false);
 
         var collider = GetComponent<CapsuleCollider>();
         collider.enabled = false;

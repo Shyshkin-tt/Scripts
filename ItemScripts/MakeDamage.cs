@@ -29,7 +29,7 @@ public class MakeDamage : MonoBehaviour
             if (npc != null && !_npcList.Contains(npc))
             {
                 _npcList.Add(npc);
-                var damage = transform.parent.GetComponentInParent<InventoryHolder>().Inventory.PDmg;
+                var damage = transform.parent.GetComponentInParent<InventoryHolder>().Characteristics.PDmg;
                 npc.NPCCreator.NPCTakeDamage(damage);              
             }            
         }

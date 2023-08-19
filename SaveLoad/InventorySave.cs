@@ -2,22 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SaveData
+public class CharacteristicsSave
+{
+    public CharacteristicsSaveData playerCharacteristics;
+    public CharacteristicsSave()
+    {
+        playerCharacteristics = new CharacteristicsSaveData();
+    }
+}
+public class InventorySave
 {    
     public InventorySaveData playerInventory;    
     public SerializableDictionary<string, ChestLootData> chestLootData;
 
-    public SaveData()
+    public InventorySave()
     {        
         playerInventory = new InventorySaveData();        
         chestLootData = new SerializableDictionary<string, ChestLootData>();
     }
 }
-public class ListSaveData
+public class ListSave
 {
     public PlayerListData playerListData;
 
-    public ListSaveData()
+    public ListSave()
     {
         playerListData = new PlayerListData();
     }
