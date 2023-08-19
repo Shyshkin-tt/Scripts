@@ -6,10 +6,10 @@ using TMPro;
 
 public class InventoryDisplay : InventoryController
 {
-    [SerializeField] private InventoryHolder _playerInventoryHolder;    
+      
     [SerializeField] private TextMeshProUGUI _playerGoldText;    
 
-    [Header("Equipment")]
+    [Header("Equipment slots")]
     public InventorySlot_UI _head;
     public InventorySlot_UI _armor;
     public InventorySlot_UI _shoes;
@@ -17,6 +17,11 @@ public class InventoryDisplay : InventoryController
     public InventorySlot_UI _lHand;
     public InventorySlot_UI _bag;
     public InventorySlot_UI _belt;
+
+    [Header("Belt slots")]
+    public InventorySlot_UI _slotOne;
+    public InventorySlot_UI _slotTwo;
+    public InventorySlot_UI _slotThree;
 
     [Header("Stats")]
     [SerializeField] private TextMeshProUGUI _ip;
@@ -56,9 +61,12 @@ public class InventoryDisplay : InventoryController
     }
      private void RefreshDisplay()
     {
-        if (_playerInventoryHolder != null)
+        if (_uiController != null)
         {
-            _inventorySystem = _playerInventoryHolder.Inventory;
+            _characterCharacteristics = _uiController._holder.Characteristics;
+            _inventorySystem = _uiController._holder.Inventory;
+            _experienceSystem = _uiController._holder.Experience;
+            _spellSystem = _uiController._holder.Spells;
             _inventorySystem.OnInventorySlotChanged += UpdateSlot;
 
         }
@@ -70,13 +78,13 @@ public class InventoryDisplay : InventoryController
     public override void AssignSlot(InventorySystem invToDisplay)// ћетод дл€ присваивани€ €чеек инвентар€ отображению
     {
 
-        slotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
+        inventorySlotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
 
         if (_slotsBag.Length != _inventorySystem.InventorySize) Debug.Log($"No inventory assigned to {this.gameObject}");
 
         for (int i = 0; i < _inventorySystem.InventorySize; i++)
         {
-            slotDictionary.Add(_slotsBag[i], _inventorySystem.InventorySlots[i]);
+            inventorySlotDictionary.Add(_slotsBag[i], _inventorySystem.InventorySlots[i]);
             _slotsBag[i].Init(_inventorySystem.InventorySlots[i]);
         }    
 
@@ -86,31 +94,33 @@ public class InventoryDisplay : InventoryController
 
         for (int i = 0; i < _inventorySystem.EquipSlotsCount; i++)
         {
-            slotDictionary.Add(_equipmentSlots[i], _inventorySystem.EquipSlots[i]);
+            inventorySlotDictionary.Add(_equipmentSlots[i], _inventorySystem.EquipSlots[i]);
             _equipmentSlots[i].Init(_inventorySystem.EquipSlots[i]);
         }
+
+        beltSlotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
 
         if (_slotsBelt.Length != _inventorySystem.BeltSlotsCount) Debug.Log($"No inventory assigned to {this.gameObject}");
 
         for (int i = 0; i < _inventorySystem.BeltSlotsCount; i++)
         {
-            slotDictionary.Add(_slotsBelt[i], _inventorySystem.BeltSlots[i]);
+            inventorySlotDictionary.Add(_slotsBelt[i], _inventorySystem.BeltSlots[i]);
             _slotsBelt[i].Init(_inventorySystem.BeltSlots[i]);
         }
     }   
 
     private void UpdateStats()
     {
-        _playerGoldText.text = $"Coins: {_playerInventoryHolder.Inventory.Coines}";
-        _ip.text = $"{_playerInventoryHolder.Inventory.ItemPower}";
-        _hp.text = $"{_playerInventoryHolder.Inventory.Health}";
-        _mp.text = $"{_playerInventoryHolder.Inventory.Mana}";
-        _pdmg.text = $"{_playerInventoryHolder.Inventory.PDmg}";
-        _mdmg.text = $"{_playerInventoryHolder.Inventory.MDmg}";
-        _as.text = $"{_playerInventoryHolder.Inventory.AttackSpeed}";
-        _pdef.text = $"{_playerInventoryHolder.Inventory.PDef}";
-        _mdef.text = $"{_playerInventoryHolder.Inventory.MDef}";
-        _hpRec.text = $"{_playerInventoryHolder.Inventory.HPRec}";
-        _mpRec.text = $"{_playerInventoryHolder.Inventory.MPRec}";
+        _playerGoldText.text = $"Coins: {_uiController._holder.Inventory.Coines}";
+        _ip.text = $"{_uiController._holder.Characteristics.ItemPower}";
+        _hp.text = $"{_uiController._holder.Characteristics.Health}";
+        _mp.text = $"{_uiController._holder.Characteristics.Mana}";
+        _pdmg.text = $"{_uiController._holder.Characteristics.PDmg}";
+        _mdmg.text = $"{_uiController._holder.Characteristics.MDmg}";
+        _as.text = $"{_uiController._holder.Characteristics.AttackSpeed}";
+        _pdef.text = $"{_uiController._holder.Characteristics.PDef}";
+        _mdef.text = $"{_uiController._holder.Characteristics.MDef}";
+        _hpRec.text = $"{_uiController._holder.Characteristics.HPRec}";
+        _mpRec.text = $"{_uiController._holder.Characteristics.MPRec}";
     }
 }

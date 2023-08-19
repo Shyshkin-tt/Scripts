@@ -11,11 +11,19 @@ public class UIController : MonoBehaviour
 
     PlayerController _input;
     [SerializeField] private InventoryDisplay _inventoryDisplay;
+    [SerializeField] private Bars _playerActivUI;
     [SerializeField] private ExpirianceDisplay _expirianceDisplay;
     [SerializeField] private ChestDisplay _chestDisplay;
     [SerializeField] private LootDisplay _lootDisplay;
     [SerializeField] private ShopKeeperDisplay _shopKeeperDisplay;
     [SerializeField] private PortalDisplay _portalDisplay;
+    [SerializeField] private ItemInfo _itemInfoPanel;
+
+    public static UnityAction OpenItemInfo;
+    public static UnityAction CloseItemInfo;
+
+    public Bars PlayerActivUI => _playerActivUI;
+    public ItemInfo InfoItem => _itemInfoPanel;
 
     public SceneLoader _sceneLoader;
     public InventoryHolder _holder;
@@ -26,6 +34,9 @@ public class UIController : MonoBehaviour
 
     private void Awake()
     {
+        OpenItemInfo += OpenTab;
+        CloseItemInfo += CloseTab;
+
         _input = new PlayerController();
 
         LoadXpForItems += LoadXp;
@@ -39,6 +50,7 @@ public class UIController : MonoBehaviour
         _lootDisplay.gameObject.SetActive(false);
         _portalDisplay.gameObject.SetActive(false);
         _sceneLoader = FindAnyObjectByType<SceneLoader>();
+        _itemInfoPanel.gameObject.SetActive(false);
     }
 
     private void LoadXp()
@@ -132,9 +144,10 @@ public class UIController : MonoBehaviour
     public void ToMainMenu()
     {
         _sceneLoader.Position = _holder.CurrentCoordinats;
-        _holder.Inventory.SetLocation(_sceneLoader.Location);
-        _holder.Inventory.SetCoord(_sceneLoader.Position);
+        _holder.Characteristics.SetLocation(_sceneLoader.Location);
+        _holder.Characteristics.SetCoord(_sceneLoader.Position);
 
+        SaveAndLoadManager.SaveCharacteristics(_sceneLoader.CharName);
         SaveAndLoadManager.SaveInventory(_sceneLoader.CharName);
         SaveAndLoadManager.SavePlayerXP(_sceneLoader.CharName);
 
@@ -163,5 +176,14 @@ public class UIController : MonoBehaviour
     private void DisplayPortalPanel()
     {
         _portalDisplay.gameObject.SetActive(true);
+    }
+
+    private void OpenTab()
+    {
+        _itemInfoPanel.gameObject.SetActive(true);
+    }
+    private void CloseTab()
+    {
+        _itemInfoPanel.gameObject.SetActive(false);
     }
 }

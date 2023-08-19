@@ -34,6 +34,7 @@ public abstract class ItemSlot : ISerializationCallbackReceiver
     public string NameItem => _nameItem;
     public string ClassItem => _classItem;
     public GameObject OnEquip => _equipObject;
+    public InventorySlot_UI SlotUI => _equipSlotUI;
     public int StackSize => _stackSize;// Геттер для доступа к приватному полю stackSize
     public void ClearSlot()// Очищает слот
     {

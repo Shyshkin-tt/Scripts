@@ -12,16 +12,22 @@ public abstract class InventoryController : MonoBehaviour
 {
     [SerializeField] MouseItemData mouseInventoryItem;
 
+    [SerializeField] protected UIController _uiController;
+    protected CharacterCharacteristics _characterCharacteristics;
     protected InventorySystem _inventorySystem;
-   
+    protected ExperienceSystem _experienceSystem;
+    protected SpellSystem _spellSystem;
 
-    protected Dictionary<InventorySlot_UI, InventorySlot> slotDictionary; // Соеденение слотов UI инвентаря со слотами инвентаря
+    protected Dictionary<InventorySlot_UI, InventorySlot> inventorySlotDictionary; // Соеденение слотов UI инвентаря со слотами инвентаря
     protected Dictionary<InventorySlot_UI, InventorySlot> equipSlotDictionary;
     protected Dictionary<InventorySlot_UI, InventorySlot> beltSlotDictionary;
     
+    public CharacterCharacteristics CharacterCharacteristics => _characterCharacteristics;
     public InventorySystem InventorySystem => _inventorySystem;
-    
-    public Dictionary<InventorySlot_UI, InventorySlot> SlotDictionary => slotDictionary;
+    public ExperienceSystem ExperienceSystem => _experienceSystem;
+    public SpellSystem SpellSystem => _spellSystem;
+
+    public Dictionary<InventorySlot_UI, InventorySlot> SlotDictionary => inventorySlotDictionary;
     public Dictionary<InventorySlot_UI, InventorySlot> EquiupSlotDictionary => equipSlotDictionary;
     public Dictionary<InventorySlot_UI, InventorySlot> BeltSlotDictionary => beltSlotDictionary;
 
@@ -34,7 +40,7 @@ public abstract class InventoryController : MonoBehaviour
     public abstract void AssignSlot(InventorySystem invToDisplay);    
     protected virtual void UpdateSlot(InventorySlot updateSlot)
     {
-        foreach (var slot in slotDictionary)
+        foreach (var slot in inventorySlotDictionary)
         {
             if (slot.Value == updateSlot)
             {
@@ -50,16 +56,15 @@ public abstract class InventoryController : MonoBehaviour
 
             }
         }
-        //foreach (var slot in beltSlotDictionary)
-        //{
-        //    if (slot.Value == updateSlot)
-        //    {
-        //        slot.Key.UpdateUISlot(updateSlot);
-
-        //    }
-        //}
+        foreach (var slot in beltSlotDictionary)
+        {
+            if (slot.Value == updateSlot)
+            {
+                slot.Key.UpdateUISlot(updateSlot);
+            }
+        }
     }
-   
+
     public void InventorySlotClicked(InventorySlot_UI clickedUISlot)// Метод, который вызывается при клике на слот инвентаря
     {
         
@@ -75,11 +80,15 @@ public abstract class InventoryController : MonoBehaviour
                     clickedUISlot.AssignedInventorySlot.AssignItem(mouseInventoryItem.AssignedInventorySlot);
                     
                     clickedUISlot.UpdateUISlot();
-                    _inventorySystem.Holder.EquipOnPlayer(clickedUISlot.AssignedInventorySlot);
 
-                    var bonusStatsClass = _inventorySystem.Holder.Experience.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
+                    _characterCharacteristics.Holder.EquipOnPlayer(clickedUISlot.AssignedInventorySlot);
 
-                    _inventorySystem.StatAdd(clickedUISlot.AssignedInventorySlot.ItemData, bonusStatsClass);                    
+                    _spellSystem.SetSpellWhenEquip(clickedUISlot.AssignedInventorySlot.ItemData);
+                    _uiController.PlayerActivUI.SetWeaponIcons(clickedUISlot.AssignedInventorySlot.ItemData);
+
+                    var bonusStatsClass = _experienceSystem.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
+
+                    _characterCharacteristics.StatAdd(clickedUISlot.AssignedInventorySlot.ItemData, bonusStatsClass);                    
 
                     mouseInventoryItem.ClearSlot();                   
                     return;
@@ -114,12 +123,14 @@ public abstract class InventoryController : MonoBehaviour
 
                 if (clickedUISlot.SlotType == SlotType.EquipSlot)
                 {
-                    var bonusStatsClass = _inventorySystem.Holder.Experience.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
+                    var bonusStatsClass = _experienceSystem.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
                     
-                    _inventorySystem.StatMinus(clickedUISlot.AssignedInventorySlot.ItemData, bonusStatsClass);
+                    _characterCharacteristics.StatMinus(clickedUISlot.AssignedInventorySlot.ItemData, bonusStatsClass);
 
-                    _inventorySystem.Holder.RemoveFromPlayer(clickedUISlot.AssignedInventorySlot);
+                    _characterCharacteristics.Holder.RemoveFromPlayer(clickedUISlot.AssignedInventorySlot);
                     clickedUISlot.ClearSlot();
+                    _spellSystem.ClearSpells();
+                    _uiController.PlayerActivUI.ClearItemIcons();
                     InventorySystem.OnEquipSlotChanged?.Invoke();
                     return;
                 }
@@ -142,19 +153,20 @@ public abstract class InventoryController : MonoBehaviour
             {
                 if (CheckItemTypesMatch(clickedUISlot.EquipSlotType, mouseInventoryItem.AssignedInventorySlot.ItemData.EquipSlotype))
                 {
-                    var oldBonusStatsClass = _inventorySystem.Holder.Experience.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
-                    _inventorySystem.StatMinus(clickedUISlot.AssignedInventorySlot.ItemData, oldBonusStatsClass);
-                    
+                    var oldBonusStatsClass = _experienceSystem.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
+                    _characterCharacteristics.StatMinus(clickedUISlot.AssignedInventorySlot.ItemData, oldBonusStatsClass);
 
-                    _inventorySystem.Holder.RemoveFromPlayer(clickedUISlot.AssignedInventorySlot);
+                    _characterCharacteristics.Holder.RemoveFromPlayer(clickedUISlot.AssignedInventorySlot);
+                    _spellSystem.ClearSpells();
+                    _uiController.PlayerActivUI.ClearItemIcons();
                     SwapSlots(clickedUISlot);
 
-                    var newBonusStatsClass = _inventorySystem.Holder.Experience.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
+                    var newBonusStatsClass = _experienceSystem.GetBonusStatsClass(clickedUISlot.AssignedInventorySlot.ItemData.ItemClass);
 
-                    _inventorySystem.StatAdd(clickedUISlot.AssignedInventorySlot.ItemData, newBonusStatsClass);
-                    _inventorySystem.Holder.EquipOnPlayer(clickedUISlot.AssignedInventorySlot);
-
-                    
+                    _characterCharacteristics.StatAdd(clickedUISlot.AssignedInventorySlot.ItemData, newBonusStatsClass);
+                    _characterCharacteristics.Holder.EquipOnPlayer(clickedUISlot.AssignedInventorySlot);
+                    _spellSystem.SetSpellWhenEquip(clickedUISlot.AssignedInventorySlot.ItemData);
+                    _uiController.PlayerActivUI.SetWeaponIcons(clickedUISlot.AssignedInventorySlot.ItemData);
 
                     return;
                 }

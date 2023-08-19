@@ -15,7 +15,7 @@ public class GunShoot : MonoBehaviour
     {
         _action = GetComponentInParent<ActionController>();
         _inventory = _action.transform.gameObject;
-        _bulletSpawn = _action._bulletSpawn;
+        _bulletSpawn = _action.UpperForwardSpawmPoint;
     }
 
     public void MakeShoot()

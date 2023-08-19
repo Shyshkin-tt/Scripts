@@ -116,6 +116,33 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Q"",
+                    ""type"": ""Button"",
+                    ""id"": ""452674f3-cb36-420e-ae3c-4fb37b7e97f0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""W"",
+                    ""type"": ""Button"",
+                    ""id"": ""450fa4bd-cb25-442b-acd3-3f91da361dc9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""E"",
+                    ""type"": ""Button"",
+                    ""id"": ""1b1a95ad-37c9-4a0d-8a76-ce3cadebaf5d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -228,6 +255,39 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""action"": ""ExpTree"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22696805-d128-4555-ba18-d02247bc4ba0"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Q"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4a9fa30c-4666-4cc4-8b10-6389e0234e31"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""W"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""635933b4-30b9-4340-b004-d767783f2ea8"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""E"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -246,6 +306,9 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         m_Player_Tab = m_Player.FindAction("Tab", throwIfNotFound: true);
         m_Player_Enter = m_Player.FindAction("Enter", throwIfNotFound: true);
         m_Player_ExpTree = m_Player.FindAction("ExpTree", throwIfNotFound: true);
+        m_Player_Q = m_Player.FindAction("Q", throwIfNotFound: true);
+        m_Player_W = m_Player.FindAction("W", throwIfNotFound: true);
+        m_Player_E = m_Player.FindAction("E", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -317,6 +380,9 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Tab;
     private readonly InputAction m_Player_Enter;
     private readonly InputAction m_Player_ExpTree;
+    private readonly InputAction m_Player_Q;
+    private readonly InputAction m_Player_W;
+    private readonly InputAction m_Player_E;
     public struct PlayerActions
     {
         private @PlayerController m_Wrapper;
@@ -331,6 +397,9 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         public InputAction @Tab => m_Wrapper.m_Player_Tab;
         public InputAction @Enter => m_Wrapper.m_Player_Enter;
         public InputAction @ExpTree => m_Wrapper.m_Player_ExpTree;
+        public InputAction @Q => m_Wrapper.m_Player_Q;
+        public InputAction @W => m_Wrapper.m_Player_W;
+        public InputAction @E => m_Wrapper.m_Player_E;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -370,6 +439,15 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @ExpTree.started += instance.OnExpTree;
             @ExpTree.performed += instance.OnExpTree;
             @ExpTree.canceled += instance.OnExpTree;
+            @Q.started += instance.OnQ;
+            @Q.performed += instance.OnQ;
+            @Q.canceled += instance.OnQ;
+            @W.started += instance.OnW;
+            @W.performed += instance.OnW;
+            @W.canceled += instance.OnW;
+            @E.started += instance.OnE;
+            @E.performed += instance.OnE;
+            @E.canceled += instance.OnE;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -404,6 +482,15 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @ExpTree.started -= instance.OnExpTree;
             @ExpTree.performed -= instance.OnExpTree;
             @ExpTree.canceled -= instance.OnExpTree;
+            @Q.started -= instance.OnQ;
+            @Q.performed -= instance.OnQ;
+            @Q.canceled -= instance.OnQ;
+            @W.started -= instance.OnW;
+            @W.performed -= instance.OnW;
+            @W.canceled -= instance.OnW;
+            @E.started -= instance.OnE;
+            @E.performed -= instance.OnE;
+            @E.canceled -= instance.OnE;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -433,5 +520,8 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         void OnTab(InputAction.CallbackContext context);
         void OnEnter(InputAction.CallbackContext context);
         void OnExpTree(InputAction.CallbackContext context);
+        void OnQ(InputAction.CallbackContext context);
+        void OnW(InputAction.CallbackContext context);
+        void OnE(InputAction.CallbackContext context);
     }
 }

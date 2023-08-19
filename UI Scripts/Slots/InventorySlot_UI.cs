@@ -1,8 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+using UnityEngine.EventSystems;
 using TMPro;
 
-public class InventorySlot_UI : MonoBehaviour
+
+public class InventorySlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private Image itemSprite;
     [SerializeField] private TextMeshProUGUI itemCount;
@@ -13,6 +17,7 @@ public class InventorySlot_UI : MonoBehaviour
     private Button button; // Ссылка на кнопку в UI
     public InventorySlot AssignedInventorySlot => assignedInventorySlot;
     public InventoryController ParentDisplay { get; private set; }
+    public ItemInfo ItemInfo { get; private set; }
 
     private void Awake()
     {
@@ -21,7 +26,9 @@ public class InventorySlot_UI : MonoBehaviour
         button = GetComponent<Button>();
         button?.onClick.AddListener(OnUISlotClick);
         // Получение ссылки на объект, отображающий инвентарь
-        ParentDisplay = transform.parent.GetComponentInParent<InventoryController>();        
+        ParentDisplay = transform.parent.GetComponentInParent<InventoryController>();
+        var ui = transform.GetComponentInParent<UIController>();
+        ItemInfo = ui.InfoItem;
     }
     public void Init(InventorySlot slot) // Инициализация ячейки инвентаря
     {
@@ -67,6 +74,23 @@ public class InventorySlot_UI : MonoBehaviour
     public EquipmentSlotType EquipSlotType
     {
         get { return _equipSlotType; }
+    }
+  
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (AssignedInventorySlot.ItemData != null)
+        {
+            //Debug.Log(this.AssignedInventorySlot.ItemData.DisplayName);
+            UIController.OpenItemInfo?.Invoke();
+            ItemInfo?.SetItemInfo(this.AssignedInventorySlot.ItemData);
+        }
+        //else Debug.Log("Slot empty");
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        //Debug.Log("Mouse exit InventorySlot_UI");
+        UIController.CloseItemInfo?.Invoke();
     }
 }
 public enum SlotType

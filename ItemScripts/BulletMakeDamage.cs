@@ -30,10 +30,11 @@ public class BulletMakeDamage : MonoBehaviour
         {
             NPC npc = other.GetComponent<NPC>();
             var owner = _ownerBullet.GetComponent<InventoryHolder>();
-            var damage = owner.Inventory.PDmg;
+            var damage = owner.Characteristics.PDmg;
+
             npc.NPCCreator.NPCTakeDamage(damage);
 
-            npc.SetTarget(_ownerBullet.gameObject);
+            npc.SetTarget(_ownerBullet);
 
             Destroy(this.gameObject);
         }

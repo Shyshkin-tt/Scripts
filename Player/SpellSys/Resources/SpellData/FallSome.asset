@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85cd1a8df4e32164f9b303c0a49014a5, type: 3}
+  m_Name: FallSome
+  m_EditorClassIdentifier: 
+  ID: 5
+  SpellName: Fall Some
+  Icon: {fileID: 21300000, guid: 4637953d65a24364aab3372a525b9ed2, type: 3}
+  Description: 
+  RequiredLevel: 0
+  SpellPrefab: {fileID: 173244195311388937, guid: 166b34a74fd4c574cb915d625cf52326, type: 3}
+  VisualFX: {fileID: 0}
+  SoundFX: {fileID: 0}
+  TypeDamage: 1
+  SpellSpawn: 2
+  TypeSpawn: 0
+  SpellType: 1
+  TargetType: 0
+  TypeCast: 2
+  TypeResource: 0
+  _destroyOnTriggerEnter: 1
+  _dealDamageBeforeDestroy: 0
+  _moveForward: 0
+  _moveToPoint: 1
+  _delayDestroy: 0
+  DestroyDistance: 0.2
+  Damage: 40
+  ManaCost: 21
+  CastingTime: 1
+  Cooldown: 1
+  LifeTime: 4
+  DistanceRange: 0
+  Speed: 8
+  SpellRepeatCount: 1

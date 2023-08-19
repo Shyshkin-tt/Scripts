@@ -30,7 +30,7 @@ public class NPCMakeDamage : MonoBehaviour
                 if (npc != null && player != null)
                 {
                     var damage = npc._npcData.PhysicDamage;
-                    player.Inventory.PlayerTakeDamage(damage);
+                    player.Characteristics.PlayerTakeDamage(damage);
                     _canHit = false;
                 }
             }                    
@@ -39,5 +39,8 @@ public class NPCMakeDamage : MonoBehaviour
         {            
             return;
         }
-    }  
+    } 
+    
+    public Collider GetCollider() { return _hit; }
+   
 }

@@ -47,10 +47,11 @@ public class LocationManager : MonoBehaviour
         GameObject charLoad = Instantiate(_loader.Char);
         _holder = FindObjectOfType<InventoryHolder>();
         charLoad.gameObject.transform.position = _loader.Position;
+        SaveAndLoadManager.LoadCharacteristics(_loader.CharName);
         SaveAndLoadManager.LoadInventory(_loader.CharName);
         SaveAndLoadManager.LoadPlayerXP(_loader.CharName);
 
-        _holder._uiPlayer.SetActive(true);
+        _holder.UIController.gameObject.SetActive(true);
 
         _holder.SetNameAndLoc(_loader.CharName, _loader.Location, _loader.Position);
 
@@ -104,11 +105,12 @@ public class LocationManager : MonoBehaviour
                 }
             }
 
-            _loader.SetStats(sceneName, spawnPoint, holder.Inventory.Name);
+            _loader.SetStats(sceneName, spawnPoint, holder.Characteristics.Name);
 
-            holder.Inventory.SetLocation(sceneName);
-            holder.Inventory.SetCoord(spawnPoint);
+            holder.Characteristics.SetLocation(sceneName);
+            holder.Characteristics.SetCoord(spawnPoint);
 
+            SaveAndLoadManager.SaveCharacteristics(_loader.CharName);
             SaveAndLoadManager.SaveInventory(_loader.CharName);
             SaveAndLoadManager.SavePlayerXP(_loader.CharName);
             // Загрузить сцену
